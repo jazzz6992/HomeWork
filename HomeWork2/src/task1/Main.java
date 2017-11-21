@@ -1,5 +1,6 @@
 package task1;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class Main {
@@ -7,8 +8,9 @@ public class Main {
         int[] arr = new int[10];
         Random random = new Random();
         for (int i = 0; i < arr.length; i++) {
-            arr[i] = random.nextInt();
+            arr[i] = random.nextInt(1000);
         }
+        System.out.println(Arrays.toString(arr));
         int min = arr[0];
         int max = arr[0];
         int minIdx = 0;
@@ -27,13 +29,14 @@ public class Main {
         System.out.println("max value =  " + max);
         arr[minIdx] = 0;
         arr[maxIdx] = 99;
-        StringBuilder result = new StringBuilder();
-        result.append("[");
-        for (int i = 0; i < arr.length; i++) {
-            result.append(arr[i] + ", ");
-        }
-        result.delete(result.length() - 2, result.length());
-        result.append("]");
-        System.out.println(result);
+        System.out.println(Arrays.toString(arr));
+//        StringBuilder result = new StringBuilder();
+//        result.append("[");
+//        for (int i = 0; i < arr.length; i++) {
+//            result.append(arr[i] + ", ");
+//        }
+//        result.delete(result.length() - 2, result.length());
+//        result.append("]");
+//        System.out.println(result);
     }
 }
