@@ -8,13 +8,13 @@ public class Main {
 
         try (Scanner scanner = new Scanner(System.in)) {
             int i = scanner.nextInt();
-            System.out.println(i);
             String test = "" + i;
             boolean isOk = true;
             for (int j = 0; j < test.length() - 1; j++) {
                 if (test.charAt(j) > test.charAt(j + 1)) {
                     System.out.println(i + " не образуют");
                     isOk = false;
+                    break;
                 }
             }
             if (isOk) {
