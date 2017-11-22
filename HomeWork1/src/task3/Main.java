@@ -1,8 +1,7 @@
 package task3;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
 public class Main {
 
@@ -11,17 +10,14 @@ public class Main {
         double a = 0;
         double b = 0;
         double r = 0;
-        try {
-            System.out.println("Задайте длину прямоугольника (положительное число)");
-            a = getPositiveNumber();
-            System.out.println("Задайте ширину прямоугольника (положительное число)");
-            b = getPositiveNumber();
-            System.out.println("Задайте радиус (положительное число)");
-            r = getPositiveNumber();
-        } catch (IOException e) {
-            System.err.println("Ошибка ввода/вывода");
-            return;
-        }
+
+        System.out.println("Задайте длину прямоугольника (положительное число)");
+        a = getPositiveNumber();
+        System.out.println("Задайте ширину прямоугольника (положительное число)");
+        b = getPositiveNumber();
+        System.out.println("Задайте радиус (положительное число)");
+        r = getPositiveNumber();
+
         if (Math.sqrt((a * a) + (b * b)) / 2 <= r) {
             System.out.println("Отверстие можно закрыть");
         } else {
@@ -29,18 +25,15 @@ public class Main {
         }
     }
 
-    public static double getPositiveNumber() throws IOException {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
-            double result = Double.parseDouble(reader.readLine());
-            if (result > 0) {
-                return result;
-            } else {
-                System.out.println("вы ввели отрицательное число или ноль");
-                return getPositiveNumber();
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("введите число");
+    public static double getPositiveNumber() {
+        Scanner scanner = new Scanner(System.in);
+        try {
+            double result = scanner.nextDouble();
+            return result;
+        } catch (InputMismatchException e) {
+            System.out.println("Некорректный ввод. Попробуйте снова");
             return getPositiveNumber();
         }
+
     }
 }

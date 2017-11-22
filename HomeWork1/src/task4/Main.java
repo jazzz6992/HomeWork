@@ -6,7 +6,7 @@ public class Main {
     public static void main(String[] args) {
         int ammount;
         Random random = new Random();
-        ammount = random.nextInt();
+        ammount = random.nextInt(10000);
         String roubles;
         int res = Math.abs(ammount);
         res %= 100;
