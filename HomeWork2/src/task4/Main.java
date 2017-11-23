@@ -5,8 +5,8 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-
-        try (Scanner scanner = new Scanner(System.in)) {
+        try {
+            Scanner scanner = new Scanner(System.in);
             int i = scanner.nextInt();
             String test = "" + i;
             boolean isOk = true;

@@ -29,11 +29,6 @@ public class Main {
             e.printStackTrace();
         } catch (NumberFormatException e) {
             System.out.println("это не целое число");
-            try {
-                reader.close();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
             return getNumber();
         }
         return result;

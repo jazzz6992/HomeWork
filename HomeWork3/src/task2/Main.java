@@ -7,7 +7,8 @@ import java.io.InputStreamReader;
 public class Main {
 
     public static void main(String[] args) {
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             int news = 0;
             System.out.println("Введите кол-во новостей");
             do {
