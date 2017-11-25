@@ -19,6 +19,7 @@ public class Main {
             choice = askUser();
             if (choice != null) {
                 if (choice.equals("")) {
+                    System.out.println("Good bye");
                     return;
                 }
                 if (choice.equals("в")) {
@@ -30,7 +31,7 @@ public class Main {
         } while (true);
     }
 
-    public static Patient createPatient() {
+    private static Patient createPatient() {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("Введите имя:");
@@ -41,7 +42,8 @@ public class Main {
                 try {
                     type = Integer.parseInt(reader.readLine());
                 } catch (NumberFormatException e) {
-
+                    System.out.println("Повторите ввод");
+                    continue;
                 }
                 if (type < 1 || type > 4) {
                     System.out.println("Повторите ввод");
@@ -89,7 +91,8 @@ public class Main {
                 try {
                     age = Integer.parseInt(reader.readLine());
                 } catch (NumberFormatException e) {
-
+                    System.out.println("Повторите ввод");
+                    continue;
                 }
                 if (age < 0) {
                     System.out.println("Повторите ввод");
@@ -104,11 +107,7 @@ public class Main {
                     System.out.println("Повторите ввод");
                 }
             } while (!s.equals("м") && !s.equals("ж"));
-            if (s.equals("м")) {
-                sex = true;
-            } else {
-                sex = false;
-            }
+            sex = s.equals("м");
             System.out.println("Укажите диагноз");
             String diag = reader.readLine();
             return new Patient(name, bloodType, age, sex, diag);
@@ -118,7 +117,7 @@ public class Main {
         return null;
     }
 
-    public static List<Patient> findByAge(Patient[] patients) {
+    private static List<Patient> findByAge(Patient[] patients) {
         int ageToFind;
         List<Patient> result = new ArrayList<>();
         System.out.println("Введите возраст для поиска");
@@ -145,7 +144,7 @@ public class Main {
     }
 
 
-    public static String askUser() {
+    private static String askUser() {
         String result = "";
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -156,7 +155,7 @@ public class Main {
         return result;
     }
 
-    public static List<Patient> findByName(Patient[] patients) {
+    private static List<Patient> findByName(Patient[] patients) {
         String nameToFind;
         List<Patient> result = new ArrayList<>();
         System.out.println("Введите имя для поиска");
@@ -175,7 +174,7 @@ public class Main {
         return result;
     }
 
-    public static void printPatientList(List<Patient> patients) {
+    private static void printPatientList(List<Patient> patients) {
         if (patients != null) {
             for (Patient p :
                     patients) {
