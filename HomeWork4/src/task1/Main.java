@@ -1,6 +1,7 @@
 package task1;
 
 public class Main {
+    // перенести работу с пользователем в мэйн
     public static void main(String[] args) {
         Manager manager = new Manager();
         manager.createTestData();
