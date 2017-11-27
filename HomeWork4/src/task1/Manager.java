@@ -7,7 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Manager {
-    public static Patient createPatient() {
+    private Patient[] patients;
+
+    public void createTestData() {
+        patients = new Patient[4];
+        for (int i = 0; i < patients.length; i++) {
+            patients[i] = createPatient();
+            System.out.println(patients[i]);
+        }
+    }
+
+    public Patient createPatient() {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
             System.out.println("Введите имя:");
@@ -93,7 +103,7 @@ public class Manager {
         return null;
     }
 
-    public static List<Patient> findByAge(Patient[] patients) {
+    public List<Patient> findByAge() {
         int ageToFind;
         List<Patient> result = new ArrayList<>();
         System.out.println("Введите возраст для поиска");
@@ -120,7 +130,7 @@ public class Manager {
     }
 
 
-    public static String askUser() {
+    public String askUser() {
         String result = "";
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -131,7 +141,7 @@ public class Manager {
         return result;
     }
 
-    public static List<Patient> findByName(Patient[] patients) {
+    public List<Patient> findByName() {
         String nameToFind;
         List<Patient> result = new ArrayList<>();
         System.out.println("Введите имя для поиска");
@@ -150,7 +160,7 @@ public class Manager {
         return result;
     }
 
-    public static void printPatientList(List<Patient> patients) {
+    public void printPatientList(List<Patient> patients) {
         if (patients != null) {
             for (Patient p :
                     patients) {
