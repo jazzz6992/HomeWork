@@ -1,5 +1,8 @@
 package task2;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.*;
 
 public class Atm {
@@ -34,21 +37,22 @@ public class Atm {
 
     public boolean deposit(int amount) {
         int amountTmp = amount;
-        for (Integer i :
-                denominations) {
-            amounts.add(amountTmp / i);
-            amountTmp %= i;
+        List<Integer> ammountsTmp = new ArrayList<>(amounts);
+        for (int i = 0; i < denominations.size(); i++) {
+            if (ammountsTmp.size() < denominations.size()) {
+                ammountsTmp.add(amountTmp / denominations.get(i));
+            } else {
+                ammountsTmp.set(i, ammountsTmp.get(i) + amountTmp / denominations.get(i));
+            }
+            amountTmp %= denominations.get(i);
         }
         if (amountTmp != 0) {
-            for (int i = 0; i < amounts.size(); i++) {
-                amounts.set(i, 0);
-            }
-            total = 0;
             System.out.println("Неудача");
             printTotal();
             return false;
         } else {
-            total = amount;
+            total += amount;
+            amounts = ammountsTmp;
             System.out.println("Пополнение произведено");
             printTotal();
             return true;
@@ -109,7 +113,25 @@ public class Atm {
     }
 
     public static void main(String[] args) {
-        Atm a = new Atm(390);
-        a.withdraw(120);
+        Atm atm = new Atm(390);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+        while (true) {
+            System.out.println("Нажмите 1 для зачисления или 2 для снятия");
+            try {
+                String choice = reader.readLine();
+                System.out.println("Введите сумму:");
+                int amount = Integer.parseInt(reader.readLine());
+                if (choice.equals("1")) {
+                    atm.deposit(amount);
+                } else if (choice.equals("2")) {
+                    atm.withdraw(amount);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (NumberFormatException e) {
+                System.out.println("Ошибка ввода суммы");
+            }
+
+        }
     }
 }
