@@ -116,9 +116,12 @@ public class Atm {
         Atm atm = new Atm(390);
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
-            System.out.println("Нажмите 1 для зачисления или 2 для снятия");
+            System.out.println("Нажмите \"1\" для зачисления, \"2\" для снятия или \"q\" для выхода");
             try {
                 String choice = reader.readLine();
+                if (choice.equals("q")) {
+                    return;
+                }
                 System.out.println("Введите сумму:");
                 int amount = Integer.parseInt(reader.readLine());
                 if (choice.equals("1")) {
