@@ -129,18 +129,6 @@ public class Manager {
         return result;
     }
 
-
-    public String askUser() {
-        String result = "";
-        try {
-            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-            result = reader.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
     public List<Patient> findByName() {
         String nameToFind;
         List<Patient> result = new ArrayList<>();
@@ -158,14 +146,5 @@ public class Manager {
             e.printStackTrace();
         }
         return result;
-    }
-
-    public void printPatientList(List<Patient> patients) {
-        if (patients != null) {
-            for (Patient p :
-                    patients) {
-                System.out.println(p);
-            }
-        }
     }
 }
