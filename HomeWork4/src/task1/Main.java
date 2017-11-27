@@ -37,7 +37,7 @@ public class Main {
         }
     }
 
-    public static String askUser() {
+    private static String askUser() {
         String result = "";
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
