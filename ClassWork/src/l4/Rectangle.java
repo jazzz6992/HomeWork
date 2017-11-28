@@ -1,3 +1,5 @@
+package l4;
+
 public class Rectangle extends Shape {
     private double a;
     private double b;

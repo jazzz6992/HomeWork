@@ -1,3 +1,5 @@
+package l4;
+
 public class Treangle extends Shape {
     private double a;
     private double b;
