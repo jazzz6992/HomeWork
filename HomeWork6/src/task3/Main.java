@@ -8,10 +8,16 @@ public class Main {
         shapes[2] = new Circle(3);
         shapes[3] = new Triangle(3, 4, 5);
         for (int i = 0; i < shapes.length; i++) {
-            System.out.println("Фигура " + shapes[i].getClass().getSimpleName());
-            System.out.println("Площадь = " + shapes[i].getSquare());
-            System.out.println("Периметр = " + shapes[i].getPerimeter());
-            System.out.println();
+            System.out.println(shapes[i]);
+        }
+        ((Rectangle) shapes[0]).setA(1);
+        ((Rectangle) shapes[0]).setB(2);
+        ((Square) shapes[1]).setA(1);
+        ((Circle) shapes[2]).setR(1);
+        ((Triangle)shapes[3]).setA(1);
+        ((Triangle)shapes[3]).setC(1);
+        for (int i = 0; i < shapes.length; i++) {
+            System.out.println(shapes[i]);
         }
     }
 }

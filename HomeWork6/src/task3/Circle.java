@@ -1,7 +1,7 @@
 package task3;
 
 public class Circle extends Shape {
-   private double r;
+    private double r;
 
     public Circle(double r) {
         super(r);
@@ -16,5 +16,21 @@ public class Circle extends Shape {
     @Override
     public double countSquare(double... dem) {
         return Math.PI * Math.pow(dem[0], 2);
+    }
+
+    public double getR() {
+        return r;
+    }
+
+    public void setR(double r) {
+        this.r = r;
+        setOneDem(0, r);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                "r=" + r +
+                '}';
     }
 }

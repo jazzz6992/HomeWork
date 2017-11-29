@@ -19,4 +19,30 @@ public class Rectangle extends Shape {
     public double countSquare(double... dem) {
         return dem[0] * dem[1];
     }
+
+    public double getA() {
+        return a;
+    }
+
+    public void setA(double a) {
+        this.a = a;
+        setOneDem(0, a);
+    }
+
+    public double getB() {
+        return b;
+    }
+
+    public void setB(double b) {
+        this.b = b;
+        setOneDem(1, b);
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() +
+                "a=" + a +
+                ", b=" + b +
+                '}';
+    }
 }
