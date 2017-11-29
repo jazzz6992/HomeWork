@@ -23,21 +23,21 @@ public class Main {
 
 
         // просто десонстрация работоспособности через разные интерфейсы
-//        System.out.println("!!!!!!!!demo!!!!!!!!");
-//        atmSimple.printTotal();
-//        System.out.println("*****************");
-//        atmSimple.deposit(200);
-//        System.out.println("*****************");
-//        atmSimple.withdraw(150);
-//        System.out.println("*****************");
-//        atmAdvanced.printTotal();
-//        System.out.println("*****************");
-//        ((DenominationsAmountInformation) atmAdvanced).printDenominationsAmount();
-//        System.out.println("*****************");
-//        System.out.println(((BankName) atmAdvanced).getBankName());
-//        System.out.println("*****************");
-//        System.out.println(((FabricantName) atmAdvanced).getFabricantName());
-//        System.out.println("*****************");
+        System.out.println("!!!!!!!!demo!!!!!!!!");
+        atmSimple.printTotal();
+        System.out.println("*****************");
+        atmSimple.deposit(200);
+        System.out.println("*****************");
+        atmSimple.withdraw(150);
+        System.out.println("*****************");
+        atmAdvanced.printTotal();
+        System.out.println("*****************");
+        ((DenominationsAmountInformation) atmAdvanced).printDenominationsAmount();
+        System.out.println("*****************");
+        System.out.println(((BankName) atmAdvanced).getBankName());
+        System.out.println("*****************");
+        System.out.println(((FabricantName) atmAdvanced).getFabricantName());
+        System.out.println("*****************");
 
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
