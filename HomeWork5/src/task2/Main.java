@@ -27,7 +27,6 @@ public class Main {
             } catch (NumberFormatException e) {
                 System.out.println("Ошибка ввода суммы");
             }
-
         }
     }
 }
