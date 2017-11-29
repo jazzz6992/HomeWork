@@ -3,6 +3,7 @@ package task1;
 import task1.Functions.BankName;
 import task1.Functions.DenominationsAmountInformation;
 import task1.Functions.FabricantName;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -33,27 +34,30 @@ public class Main {
         System.out.println("*****************");
         ((DenominationsAmountInformation) atmAdvanced).printDenominationsAmount();
         System.out.println("*****************");
-        System.out.println(((BankName)atmAdvanced).getBankName());
+        System.out.println(((BankName) atmAdvanced).getBankName());
         System.out.println("*****************");
-        System.out.println(((FabricantName)atmAdvanced).getFabricantName());
+        System.out.println(((FabricantName) atmAdvanced).getFabricantName());
         System.out.println("*****************");
-
 
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         while (true) {
-            System.out.println("Нажмите \"1\" для зачисления, \"2\" для снятия или \"q\" для выхода");
+            System.out.println("Нажмите \"1\" для зачисления, \"2\" для снятия, \"3\" для информации о балансе или \"q\" для выхода");
             try {
                 String choice = reader.readLine();
                 if (choice.equals("q")) {
                     return;
                 }
-                System.out.println("Введите сумму:");
-                int amount = Integer.parseInt(reader.readLine());
-                if (choice.equals("1")) {
-                    atmAdvanced.deposit(amount);
-                } else if (choice.equals("2")) {
-                    atmAdvanced.withdraw(amount);
+                if (choice.equals("3")) {
+                    atmAdvanced.printTotal();
+                } else {
+                    System.out.println("Введите сумму:");
+                    int amount = Integer.parseInt(reader.readLine());
+                    if (choice.equals("1")) {
+                        atmAdvanced.deposit(amount);
+                    } else if (choice.equals("2")) {
+                        atmAdvanced.withdraw(amount);
+                    }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
