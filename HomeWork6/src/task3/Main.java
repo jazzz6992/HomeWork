@@ -8,9 +8,9 @@ public class Main {
         shapes[2] = new Circle(3);
         shapes[3] = new Triangle(3, 4, 5);
         for (int i = 0; i < shapes.length; i++) {
-            System.out.println("Финура " + i);
-            System.out.println(shapes[i].getSquare());
-            System.out.println(shapes[i].getPerimeter());
+            System.out.println("Фигура " + shapes[i].getClass().getSimpleName());
+            System.out.println("Площадь = " + shapes[i].getSquare());
+            System.out.println("Периметр = " + shapes[i].getPerimeter());
             System.out.println();
         }
     }
