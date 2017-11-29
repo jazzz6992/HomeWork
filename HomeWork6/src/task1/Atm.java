@@ -35,6 +35,7 @@ public abstract class Atm implements Withdrawable, BalanceInformation, Depositab
 
     public boolean withdraw(int amount) {
         if (total < amount) {
+            System.out.println("Нехватает денег");
             return false;
         }
         int tmpAmount = amount;
