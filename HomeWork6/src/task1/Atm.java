@@ -79,7 +79,7 @@ public abstract class Atm implements Withdrawable, BalanceInformation, Depositab
     }
 
     public void setDenominations(List<Denomination> denominations) {
-        total=0;
+        total = 0;
         Comparator<Denomination> comparator = new Comparator<Denomination>() {
             @Override
             public int compare(Denomination o1, Denomination o2) {
