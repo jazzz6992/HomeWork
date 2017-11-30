@@ -1,8 +1,8 @@
 package task1;
 
-import task1.Functions.BankName;
-import task1.Functions.DenominationsAmountInformation;
-import task1.Functions.FabricantName;
+import task1.functions.BankName;
+import task1.functions.DenominationsAmountInformation;
+import task1.functions.FabricantName;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ public class AtmWithBlackJackAndHookers extends Atm implements BankName, Fabrica
     private String bankName;
     private String fabricantName;
 
-    public AtmWithBlackJackAndHookers(List<Integer> denominations, int amount, String bankName, String fabricantName) {
-        super(denominations, amount, true);
+    public AtmWithBlackJackAndHookers(List<Denomination> denominations, boolean depositable, String bankName, String fabricantName) {
+        super(denominations, depositable);
         this.bankName = bankName;
         this.fabricantName = fabricantName;
     }
@@ -38,7 +38,7 @@ public class AtmWithBlackJackAndHookers extends Atm implements BankName, Fabrica
     public void printDenominationsAmount() {
         System.out.println("Оставштеся в банкомате банкноты: ");
         for (int i = 0; i < getDenominations().size(); i++) {
-            System.out.println(getDenominations().get(i) + " " + getAmounts().get(i));
+            System.out.println(getDenominations().get(i).getDenomination() + " " + getDenominations().get(i).getAmount());
         }
     }
 }

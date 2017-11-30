@@ -1,8 +1,8 @@
 package task1;
 
-import task1.Functions.BankName;
-import task1.Functions.DenominationsAmountInformation;
-import task1.Functions.FabricantName;
+import task1.functions.BankName;
+import task1.functions.DenominationsAmountInformation;
+import task1.functions.FabricantName;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,12 +14,16 @@ public class Main {
     public static void main(String[] args) {
         Atm atmAdvanced;
         Atm atmSimple;
-        List<Integer> denom = new ArrayList<>();
-        denom.add(100);
-        denom.add(50);
-        denom.add(20);
-        atmAdvanced = new AtmWithBlackJackAndHookers(denom, 390, "VTB24", "Some handy guy");
-        atmSimple = new AtmSimple(denom, 570);
+        List<Denomination> denom1 = new ArrayList<>();
+        denom1.add(new Denomination(100, 5));
+        denom1.add(new Denomination(50, 5));
+        denom1.add(new Denomination(20, 5));
+        List<Denomination> denom2 = new ArrayList<>();
+        denom2.add(new Denomination(100, 5));
+        denom2.add(new Denomination(50, 5));
+        denom2.add(new Denomination(20, 5));
+        atmAdvanced = new AtmWithBlackJackAndHookers(denom1, true, "VTB24", "Some handy guy");
+        atmSimple = new AtmSimple(denom2);
 
 
         // просто десонстрация работоспособности через разные интерфейсы

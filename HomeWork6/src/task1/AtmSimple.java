@@ -3,8 +3,8 @@ package task1;
 import java.util.List;
 
 public class AtmSimple extends Atm {
-    public AtmSimple(List<Integer> denominations, int amount) {
-        super(denominations, amount, false);
+    public AtmSimple(List<Denomination> denominations) {
+        super(denominations, false);
     }
 
     @Override
