@@ -24,7 +24,7 @@ public abstract class Atm implements Withdrawable, BalanceInformation, Depositab
             return false;
         }
         int tmpAmount = amount;
-        List<Denomination> tmp = new ArrayList<>(denominations);
+        List<Denomination> tmp = AtmHelper.cloneDenominations(denominations);
         Map<Integer, Integer> toPrint = new HashMap<>();
         for (int i = 0; i < denominations.size(); i++) {
             if (denominations.get(i).getDenomination() > tmpAmount) {
@@ -118,7 +118,7 @@ public abstract class Atm implements Withdrawable, BalanceInformation, Depositab
         @Override
         public boolean deposit(int amount) {
             int amountTmp = amount;
-            List<Denomination> denominationsTmp = new ArrayList<>(denominations);
+            List<Denomination> denominationsTmp = AtmHelper.cloneDenominations(denominations);
             for (int i = 0; i < denominationsTmp.size(); i++) {
                 denominationsTmp.get(i).setAmount(denominationsTmp.get(i).getAmount() + amountTmp / denominationsTmp.get(i).getDenomination());
                 amountTmp %= denominationsTmp.get(i).getDenomination();
