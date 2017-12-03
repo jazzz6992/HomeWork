@@ -25,7 +25,7 @@ public class UI {
     }
 
     public static void main(String[] args) {
-        MyManager manager = new MyManager();
+        StudentManager manager = new MyManager();
         String format;
         System.out.println("Введите формат даты или оставьте поле пустым для использования формата yyyy-M-d");
         try {
@@ -52,26 +52,21 @@ public class UI {
 
     public static void printLifetime(GregorianCalendar c) {
         StringBuilder sb = new StringBuilder();
-        String y;
-        String mon;
-        String d;
-        String h;
-        String min;
-        int years = c.get(GregorianCalendar.YEAR);
-        int months = c.get(GregorianCalendar.MONTH);
-        int days = c.get(GregorianCalendar.DAY_OF_MONTH);
-        int hours = c.get(GregorianCalendar.HOUR_OF_DAY);
-        int mins = c.get(GregorianCalendar.MINUTE);
-        y = getCorrectForm(0, years);
-        mon = getCorrectForm(1, months);
-        d = getCorrectForm(2, days);
-        h = getCorrectForm(3, hours);
-        min = getCorrectForm(4, mins);
-        sb.append(years).append(" ").append(y).append(" ")
-                .append(months).append(" ").append(mon).append(" ")
-                .append(days).append(" ").append(d).append(" ")
-                .append(hours).append(" ").append(h).append(" ")
-                .append(mins).append(" ").append(min);
+        String[] forms = new String[5];
+        int[] numbersForForm = new int[5];
+        numbersForForm[0] = c.get(GregorianCalendar.YEAR);
+        numbersForForm[1] = c.get(GregorianCalendar.MONTH);
+        numbersForForm[2] = c.get(GregorianCalendar.DAY_OF_MONTH);
+        numbersForForm[3] = c.get(GregorianCalendar.HOUR_OF_DAY);
+        numbersForForm[4] = c.get(GregorianCalendar.MINUTE);
+        for (int i = 0; i < 5; i++) {
+            forms[i] = getCorrectForm(i, numbersForForm[i]);
+        }
+        sb.append(numbersForForm[0]).append(" ").append(forms[0]).append(" ")
+                .append(numbersForForm[1]).append(" ").append(forms[1]).append(" ")
+                .append(numbersForForm[2]).append(" ").append(forms[2]).append(" ")
+                .append(numbersForForm[3]).append(" ").append(forms[3]).append(" ")
+                .append(numbersForForm[4]).append(" ").append(forms[4]);
         System.out.println(sb.toString());
     }
 
