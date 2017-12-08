@@ -37,14 +37,7 @@ public class UI {
         }
         if (RESOURCE.exists() && RESOURCE.isFile()) {
             System.out.println("Загружаем из базы");
-            try {
-                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(RESOURCE));
-                List<Student> students = (List<Student>) ois.readObject();
-                ois.close();
-                manager.setStudents(students);
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
+            manager.loadStudents(RESOURCE);
         } else {
             System.out.println("Создаем базу");
             try {
@@ -81,7 +74,7 @@ public class UI {
     }
 
     public static void printLifetime(GregorianCalendar c) {
-        StringBuilder sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder("Средний возраст = ");
         String[] forms = new String[5];
         int[] numbersForForm = new int[5];
         numbersForForm[0] = c.get(GregorianCalendar.YEAR);

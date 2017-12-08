@@ -19,4 +19,6 @@ public interface StudentManager {
     boolean removeStudent(Student s);
 
     boolean saveStudents(File file);
+
+    boolean loadStudents(File file);
 }

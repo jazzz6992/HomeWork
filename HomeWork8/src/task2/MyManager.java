@@ -1,9 +1,6 @@
 package task2;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -58,6 +55,24 @@ public class MyManager implements StudentManager {
             e.printStackTrace();
             return false;
         }
+    }
+
+    @Override
+    public boolean loadStudents(File file) {
+        try {
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file));
+            List<Student> students = (List<Student>) ois.readObject();
+            ois.close();
+            setStudents(students);
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     public Date getAvarageDate() {
