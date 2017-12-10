@@ -67,7 +67,7 @@ public class BuildingManagerImplimentation implements BuildingManager {
                     return false;
             }
         } catch (WrongLightException e) {
-            System.out.println(e.getMessage());
+            ui.print(e.getMessage());
         }
         return true;
     }
@@ -126,7 +126,7 @@ public class BuildingManagerImplimentation implements BuildingManager {
         try {
             room.add(new Furniture(name, square));
         } catch (SpaceUsageTooMuchException e) {
-            System.out.println(e.getMessage());
+            ui.print(e.getMessage());
         }
     }
 
@@ -145,7 +145,7 @@ public class BuildingManagerImplimentation implements BuildingManager {
             return null;
         }
         for (int i = 0; i < obj.size(); i++) {
-            System.out.println(i + 1 + ") " + obj.get(i).toString());
+            ui.print(i + 1 + ") " + obj.get(i).toString());
         }
         ui.print("Введите номер");
         while (true) {
