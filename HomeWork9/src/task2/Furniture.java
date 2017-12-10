@@ -26,6 +26,6 @@ public class Furniture {
     }
 
     public String describe() {
-        return String.format("          %s (площадь = %d м2)", name, square);
+        return String.format("          %s (площадь = %d м2)\n", name, square);
     }
 }
