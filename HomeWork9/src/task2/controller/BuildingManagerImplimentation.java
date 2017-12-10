@@ -39,7 +39,7 @@ public class BuildingManagerImplimentation implements BuildingManager {
         }
     }
 
-    public void chooseBuilding() throws IOException {
+    private void chooseBuilding() throws IOException {
         Building current = (Building) choose(buildings);
         if (current != null) {
             boolean buildingContin = true;
@@ -52,7 +52,7 @@ public class BuildingManagerImplimentation implements BuildingManager {
         }
     }
 
-    public boolean processRoomMenuChoice(Building current) throws IOException {
+    private boolean processRoomMenuChoice(Building current) throws IOException {
         try {
             switch (getPositiveInt()) {
                 case 1:
@@ -73,7 +73,7 @@ public class BuildingManagerImplimentation implements BuildingManager {
         return true;
     }
 
-    public void chooseRoom(Building building) throws IOException {
+    private void chooseRoom(Building building) throws IOException {
         Room room = (Room) choose(building.getRooms());
         if (room != null) {
             boolean roomContin = true;
