@@ -24,7 +24,7 @@ public class UiImplimentation implements Ui {
     public void printMenu(String... strings) {
         print("Нажмите:");
         for (int i = 0; i < strings.length; i++) {
-            print(String.format("%d - %s", i+1, strings[i]));
+            print(String.format("%d - %s", i + 1, strings[i]));
         }
     }
 

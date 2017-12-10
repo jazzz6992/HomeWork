@@ -7,7 +7,6 @@ import task2.exceptions.WrongLightException;
 import task2.interfaces.BuildingManager;
 import task2.interfaces.Ui;
 
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
