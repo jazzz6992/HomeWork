@@ -4,24 +4,26 @@ import task2.*;
 import task2.exceptions.IlluminanceTooMuchException;
 import task2.exceptions.SpaceUsageTooMuchException;
 import task2.exceptions.WrongLightException;
-import task2.view.Ui;
+import task2.interfaces.BuildingManager;
+import task2.interfaces.Ui;
+import task2.view.UiImplimentation;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import static task2.view.Ui.getPositiveInt;
+import static task2.view.UiImplimentation.getPositiveInt;
 
-public class Manager {
+public class BuildingManagerImplimentation implements BuildingManager {
     private Ui ui;
     private List<Building> buildings = new ArrayList<>();
 
-    public Manager(Ui ui) {
+    public BuildingManagerImplimentation(Ui ui) {
         this.ui = ui;
     }
 
-    public void processBuildingMenuChoice() throws IOException {
-        switch (getPositiveInt()) {
+    public void processBuildingMenuChoice(int choice) throws IOException {
+        switch (choice) {
             case 1:
                 chooseBuilding();
                 break;
@@ -37,7 +39,7 @@ public class Manager {
         }
     }
 
-    private void chooseBuilding() throws IOException {
+    public void chooseBuilding() throws IOException {
         Building current = (Building) choose(buildings);
         if (current != null) {
             boolean buildingContin = true;
@@ -50,7 +52,7 @@ public class Manager {
         }
     }
 
-    private boolean processRoomMenuChoice(Building current) throws IOException {
+    public boolean processRoomMenuChoice(Building current) throws IOException {
         try {
             switch (getPositiveInt()) {
                 case 1:
@@ -71,7 +73,7 @@ public class Manager {
         return true;
     }
 
-    private void chooseRoom(Building building) throws IOException {
+    public void chooseRoom(Building building) throws IOException {
         Room room = (Room) choose(building.getRooms());
         if (room != null) {
             boolean roomContin = true;
@@ -103,15 +105,15 @@ public class Manager {
 
     private void addBuilding(List<Building> buildings) throws IOException {
         ui.print("Введите название здания");
-        buildings.add(new Building(Ui.getString()));
+        buildings.add(new Building(UiImplimentation.getString()));
     }
 
     private void addRoom(Building building) throws IOException, WrongLightException {
         ui.print("Введите название комнаты");
-        String name = Ui.getString();
+        String name = UiImplimentation.getString();
         int square;
         ui.print("Введите площадь комнаты");
-        square = Ui.getPositiveInt();
+        square = UiImplimentation.getPositiveInt();
         ui.print("Введите кол-во окон");
         int windows = getPositiveInt();
         building.addRoom(name, square, windows);
@@ -119,9 +121,9 @@ public class Manager {
 
     private void addFurniture(Room room) throws IOException {
         ui.print("Введите название");
-        String name = Ui.getString();
+        String name = UiImplimentation.getString();
         ui.print("Введите площадь");
-        int square = Ui.getPositiveInt();
+        int square = UiImplimentation.getPositiveInt();
         try {
             room.add(new Furniture(name, square));
         } catch (SpaceUsageTooMuchException e) {
@@ -131,7 +133,7 @@ public class Manager {
 
     private void addLightBuld(Room room) throws IOException {
         ui.print("Введите мощность лампы");
-        int light = Ui.getPositiveInt();
+        int light = UiImplimentation.getPositiveInt();
         try {
             room.add(new Lightbulb(light));
         } catch (IlluminanceTooMuchException e) {

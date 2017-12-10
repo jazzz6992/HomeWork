@@ -1,26 +1,28 @@
 package task2.view;
 
 import com.sun.istack.internal.NotNull;
-import task2.controller.Manager;
+import task2.controller.BuildingManagerImplimentation;
+import task2.interfaces.BuildingManager;
+import task2.interfaces.Ui;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-public class Ui {
+public class UiImplimentation implements Ui {
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public static void main(String[] args) throws IOException {
-        Ui ui = new Ui();
-        System.out.println("Введите \"quit\" в любой момент для выхода из программы");
-        Manager manager = new Manager(ui);
+        Ui ui = new UiImplimentation();
+        ui.print("Введите \"quit\" в любой момент для выхода из программы");
+        BuildingManager manager = new BuildingManagerImplimentation(ui);
         while (true) {
             ui.printBuildengMenu();
-            manager.processBuildingMenuChoice();
+            manager.processBuildingMenuChoice(getPositiveInt());
         }
     }
 
-    private void printBuildengMenu() {
+    public void printBuildengMenu() {
         System.out.println("Нажмите:");
         System.out.println("1 - для выбора здания");
         System.out.println("2 - для добавления здания");
