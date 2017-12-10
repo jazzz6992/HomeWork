@@ -1,6 +1,9 @@
 package task2;
 
-import task2.exceptions.*;
+import task2.exceptions.IlluminanceTooLittleException;
+import task2.exceptions.IlluminanceTooMuchException;
+import task2.exceptions.SpaceUsageTooMuchException;
+import task2.exceptions.WrongLightException;
 import task2.helpers.WordFormatHelper;
 
 import java.util.ArrayList;
@@ -86,8 +89,9 @@ public class Room {
         this.name = name;
     }
 
-    public void describe() {
-        System.out.println("    " + name);
+    public String describe() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.format("    %s\n", name));
         Map<Integer, Integer> lightbulbsPower = new HashMap<>();
         for (Lightbulb i : illuminations) {
             if (lightbulbsPower.containsKey(i.getLighting())) {
@@ -96,22 +100,23 @@ public class Room {
                 lightbulbsPower.put(i.getLighting(), 1);
             }
         }
-        System.out.println(String.format("      Освещенность = %dлк: %d окна по %d лк, %d %s", illumination, windows, Window.LIGHTING, illuminations.size(), WordFormatHelper.getCorrectForm(illuminations.size())));
+        sb.append(String.format("      Освещенность = %dлк: %d окна по %d лк, %d %s\n", illumination, windows, Window.LIGHTING, illuminations.size(), WordFormatHelper.getCorrectForm(illuminations.size())));
         for (Map.Entry<Integer, Integer> e :
                 lightbulbsPower.entrySet()) {
             int ammount = e.getValue();
-            System.out.println(String.format("            %d %s мощностью %dлк", ammount, WordFormatHelper.getCorrectForm(ammount), e.getKey()));
+            sb.append(String.format("            %d %s мощностью %dлк\n", ammount, WordFormatHelper.getCorrectForm(ammount), e.getKey()));
         }
-        System.out.println(String.format("      Площадь = %d м2. Занято %d м2.", square, usedSquare));
+        sb.append(String.format("      Площадь = %d м2. Занято %d м2.\n", square, usedSquare));
         if (furniture.size() == 0) {
-            System.out.println("        Мебели нет");
+            sb.append("        Мебели нет\n");
         } else {
-            System.out.println("        Мебель:");
+            sb.append("        Мебель:\n");
             for (Furniture f :
                     furniture) {
-                f.describe();
+                sb.append(f.describe());
             }
         }
+        return sb.toString();
     }
 
     @Override

@@ -1,9 +1,6 @@
 package task2.controller;
 
-import task2.Building;
-import task2.Furniture;
-import task2.Lightbulb;
-import task2.Room;
+import task2.*;
 import task2.exceptions.IlluminanceTooMuchException;
 import task2.exceptions.SpaceUsageTooMuchException;
 import task2.exceptions.WrongLightException;
@@ -34,7 +31,7 @@ public class Manager {
             case 3:
                 for (Building b :
                         buildings) {
-                    b.describe();
+                    ui.print(b.describe());
                 }
                 break;
         }
@@ -63,7 +60,7 @@ public class Manager {
                     addRoom(current);
                     break;
                 case 3:
-                    current.describe();
+                    ui.print(current.describe());
                     break;
                 case 4:
                     return false;
@@ -96,7 +93,7 @@ public class Manager {
                 addLightBuld(room);
                 break;
             case 3:
-                room.describe();
+                ui.print(room.describe());
                 break;
             case 4:
                 return false;

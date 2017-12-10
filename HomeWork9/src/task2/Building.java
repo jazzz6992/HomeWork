@@ -42,12 +42,14 @@ public class Building {
         return rooms.get(i);
     }
 
-    public void describe() {
-        System.out.println(name);
+    public String describe() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(name).append("\n");
         for (Room room :
                 rooms) {
-            room.describe();
+            sb.append(room.describe());
         }
+        return sb.toString();
     }
 
     @Override
