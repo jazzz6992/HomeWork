@@ -17,8 +17,7 @@ public class UiImplimentation implements Ui {
         ui.print("Введите \"quit\" в любой момент для выхода из программы");
         BuildingManager manager = new BuildingManagerImplimentation(ui);
         while (true) {
-            ui.printBuildengMenu();
-            manager.processBuildingMenuChoice(getPositiveInt());
+            manager.process();
         }
     }
 
@@ -46,7 +45,7 @@ public class UiImplimentation implements Ui {
     }
 
     @NotNull
-    public static String getString() throws IOException {
+    public String getString() throws IOException {
         String result = reader.readLine();
         if (result.equals("quit")) {
             System.exit(0);
@@ -56,7 +55,7 @@ public class UiImplimentation implements Ui {
         }
     }
 
-    public static int getPositiveInt() throws IOException {
+    public int getPositiveInt() throws IOException {
         try {
             int i = Integer.parseInt(getString());
             if (i <= 0) {
