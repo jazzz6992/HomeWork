@@ -35,14 +35,11 @@ public class Building {
         rooms.add(room);
     }
 
-    public Room getRoom(String name) {
-        for (Room cur :
-                rooms) {
-            if (cur.getName().equals(name)) {
-                return cur;
-            }
+    public Room getRoom(int i) {
+        if (i < 0 || i >= rooms.size()) {
+            return null;
         }
-        return null;
+        return rooms.get(i);
     }
 
     public void describe() {

@@ -17,101 +17,150 @@ public class Main {
         System.out.println("Введите \"quit\" в любой момент для выхода из программы");
         List<Building> buildings = new ArrayList<>();
         while (true) {
-            System.out.println("Нажмите:");
-            System.out.println("1 - для выбора здания");
-            System.out.println("2 - для добавления здания");
-            System.out.println("3 - для вывода информации о каждом здании");
+            printBuildengMenu();
+            processBuildingMenuChoice(buildings);
+        }
+    }
+
+    private static void printBuildengMenu() {
+        System.out.println("Нажмите:");
+        System.out.println("1 - для выбора здания");
+        System.out.println("2 - для добавления здания");
+        System.out.println("3 - для вывода информации о каждом здании");
+    }
+
+    private static void processBuildingMenuChoice(List<Building> buildings) throws IOException {
+        switch (getPositiveInt()) {
+            case 1:
+                chooseBuilding(buildings);
+                break;
+            case 2:
+                addBuilding(buildings);
+                break;
+            case 3:
+                for (Building b :
+                        buildings) {
+                    b.describe();
+                }
+                break;
+        }
+    }
+
+    private static void chooseBuilding(List<Building> buildings) throws IOException {
+        Building current = (Building) choose(buildings);
+        if (current != null) {
+            boolean buildingContin = true;
+            while (buildingContin) {
+                printRoomMenu();
+                buildingContin = processRoomMenuChoice(current);
+            }
+        } else {
+            System.out.println("Список зданий пуст");
+        }
+    }
+
+    private static void printRoomMenu() {
+        System.out.println("Нажмите:");
+        System.out.println("1 - для выбора комнаты");
+        System.out.println("2 - для добавления комнаты");
+        System.out.println("3 - просмотра информации");
+        System.out.println("4 - для возврата к предыдущему меню");
+    }
+
+    private static boolean processRoomMenuChoice(Building current) throws IOException {
+        try {
             switch (getPositiveInt()) {
                 case 1:
-                    Building current = (Building) choose(buildings);
-                    if (current != null) {
-                        boolean buildingContin = true;
-                        while (buildingContin) {
-                            System.out.println("Нажмите:");
-                            System.out.println("1 - для выбора комнаты");
-                            System.out.println("2 - для добавления комнаты");
-                            System.out.println("3 - просмотра информации");
-                            System.out.println("4 - для возврата к предыдущему меню");
-                            try {
-                                switch (getPositiveInt()) {
-                                    case 1:
-                                        Room room = (Room) choose(current.getRooms());
-                                        if (room != null) {
-                                            boolean roomContin = true;
-                                            while (roomContin) {
-                                                System.out.println("Нажмите:");
-                                                System.out.println("1 - для добавления предметов мебели");
-                                                System.out.println("2 - для добавления освещения");
-                                                System.out.println("3 - просмотра информации");
-                                                System.out.println("4 - для возврата к предыдущему меню");
-                                                switch (getPositiveInt()) {
-                                                    case 1:
-                                                        System.out.println("Введите название");
-                                                        String name = getString();
-                                                        System.out.println("Введите площадь");
-                                                        int square = getPositiveInt();
-                                                        try {
-                                                            room.add(new Furniture(name, square));
-                                                        } catch (SpaceUsageTooMuchException e) {
-                                                            System.out.println(e.getMessage());
-                                                        }
-                                                        break;
-                                                    case 2:
-                                                        System.out.println("Введите мощность лампы");
-                                                        int light = getPositiveInt();
-                                                        try {
-                                                            room.add(new Lightbulb(light));
-                                                        } catch (IlluminanceTooMuchException e) {
-                                                            System.out.println(e.getMessage());
-                                                        }
-                                                        break;
-                                                    case 3:
-                                                        room.describe();
-                                                        break;
-                                                    case 4:
-                                                        roomContin = false;
-                                                        break;
-                                                }
-                                            }
-                                        } else {
-                                            System.out.println("Список комнат пуст");
-                                        }
-                                        break;
-                                    case 2:
-                                        System.out.println("Введите название комнаты");
-                                        String name = getString();
-                                        int square;
-                                        System.out.println("Введите площадь комнаты");
-                                        square = getPositiveInt();
-                                        System.out.println("Введите кол-во окон");
-                                        int windows = getPositiveInt();
-                                        current.addRoom(name, square, windows);
-                                        break;
-                                    case 3:
-                                        current.describe();
-                                        break;
-                                    case 4:
-                                        buildingContin = false;
-                                        break;
-                                }
-                            } catch (WrongLightException e) {
-                                System.out.println(e.getMessage());
-                            }
-                        }
-                    } else {
-                        System.out.println("Список зданий пуст");
-                    }
+                    chooseRoom(current);
                     break;
                 case 2:
-                    addBuilding(buildings);
+                    addRoom(current);
                     break;
                 case 3:
-                    for (Building b :
-                            buildings) {
-                        b.describe();
-                    }
+                    current.describe();
                     break;
+                case 4:
+                    return false;
             }
+        } catch (WrongLightException e) {
+            System.out.println(e.getMessage());
+        }
+        return true;
+    }
+
+    private static void chooseRoom(Building building) throws IOException {
+        Room room = (Room) choose(building.getRooms());
+        if (room != null) {
+            boolean roomContin = true;
+            while (roomContin) {
+                printInteriorMenu();
+                roomContin = processInteriorMenuChoice(room);
+            }
+        } else {
+            System.out.println("Список комнат пуст");
+        }
+    }
+
+    private static void printInteriorMenu() {
+        System.out.println("Нажмите:");
+        System.out.println("1 - для добавления предметов мебели");
+        System.out.println("2 - для добавления освещения");
+        System.out.println("3 - просмотра информации");
+        System.out.println("4 - для возврата к предыдущему меню");
+    }
+
+    private static boolean processInteriorMenuChoice(Room room) throws IOException {
+        switch (getPositiveInt()) {
+            case 1:
+                addFurniture(room);
+                break;
+            case 2:
+                addLightBuld(room);
+                break;
+            case 3:
+                room.describe();
+                break;
+            case 4:
+                return false;
+        }
+        return true;
+    }
+
+    private static void addBuilding(List<Building> buildings) throws IOException {
+        System.out.println("Введите название здания");
+        buildings.add(new Building(getString()));
+    }
+
+    private static void addRoom(Building building) throws IOException, WrongLightException {
+        System.out.println("Введите название комнаты");
+        String name = getString();
+        int square;
+        System.out.println("Введите площадь комнаты");
+        square = getPositiveInt();
+        System.out.println("Введите кол-во окон");
+        int windows = getPositiveInt();
+        building.addRoom(name, square, windows);
+    }
+
+    private static void addFurniture(Room room) throws IOException {
+        System.out.println("Введите название");
+        String name = getString();
+        System.out.println("Введите площадь");
+        int square = getPositiveInt();
+        try {
+            room.add(new Furniture(name, square));
+        } catch (SpaceUsageTooMuchException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private static void addLightBuld(Room room) throws IOException {
+        System.out.println("Введите мощность лампы");
+        int light = getPositiveInt();
+        try {
+            room.add(new Lightbulb(light));
+        } catch (IlluminanceTooMuchException e) {
+            System.out.println(e.getMessage());
         }
     }
 
@@ -139,7 +188,7 @@ public class Main {
         }
     }
 
-    private static Object choose(List<?> obj) throws IOException {
+    private static Object choose(List obj) throws IOException {
         if (obj.size() == 0) {
             return null;
         }
@@ -155,10 +204,5 @@ public class Main {
                 return obj.get(choice);
             }
         }
-    }
-
-    private static void addBuilding(List<Building> buildings) throws IOException {
-        System.out.println("Введите название здания");
-        buildings.add(new Building(getString()));
     }
 }
