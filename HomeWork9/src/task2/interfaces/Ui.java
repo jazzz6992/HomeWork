@@ -5,11 +5,7 @@ import java.io.IOException;
 public interface Ui {
     void print(String describe);
 
-    void printRoomMenu();
-
-    void printInteriorMenu();
-
-    void printBuildengMenu();
+    void printMenu(String... strings);
 
     String getString() throws IOException;
 

@@ -15,13 +15,16 @@ import java.util.List;
 public class BuildingManagerImplimentation implements BuildingManager {
     private Ui ui;
     private List<Building> buildings = new ArrayList<>();
+    private static final String[] BUILDING_MENU = {"для выбора здания", "для добавления здания", "для вывода информации о каждом здании"};
+    private static final String[] ROOM_MENU = {"для выбора комнаты", "для добавления комнаты", "просмотра информации о здании", "для возврата к предыдущему меню"};
+    private static final String[] INTERIOR_MENU = {"для добавления предметов мебели", "для добавления освещения", "просмотра информации о комнате", "для возврата к предыдущему меню"};
 
     public BuildingManagerImplimentation(Ui ui) {
         this.ui = ui;
     }
 
     public void process() throws IOException {
-        ui.printBuildengMenu();
+        ui.printMenu(BUILDING_MENU);
         switch (ui.getPositiveInt()) {
             case 1:
                 chooseBuilding();
@@ -43,7 +46,7 @@ public class BuildingManagerImplimentation implements BuildingManager {
         if (current != null) {
             boolean buildingContin = true;
             while (buildingContin) {
-                ui.printRoomMenu();
+                ui.printMenu(ROOM_MENU);
                 buildingContin = processRoomMenuChoice(current);
             }
         } else {
@@ -77,7 +80,7 @@ public class BuildingManagerImplimentation implements BuildingManager {
         if (room != null) {
             boolean roomContin = true;
             while (roomContin) {
-                ui.printInteriorMenu();
+                ui.printMenu(INTERIOR_MENU);
                 roomContin = processInteriorMenuChoice(room);
             }
         } else {
