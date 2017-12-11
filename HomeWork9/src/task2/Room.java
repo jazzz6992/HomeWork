@@ -18,7 +18,7 @@ public class Room {
     private int illumination;
     private int windows;
     private static final int MIN_LIGHT = 300;
-    private static final int MAX_LIGHT = 7000;
+    private static final int MAX_LIGHT = 4000;
     private List<Furniture> furniture;
     private List<Lightbulb> illuminations;
 
