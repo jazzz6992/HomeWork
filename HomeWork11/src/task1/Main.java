@@ -19,7 +19,9 @@ public class Main {
         int responseCode = connection.getResponseCode();
         if (responseCode == HttpURLConnection.HTTP_OK) {
             if (!file.exists()) {
-                file.createNewFile();
+                if (!file.createNewFile()) {
+                    return;
+                }
             }
             try (InputStream inputStream = connection.getInputStream()) {
                 try (OutputStream outputStream = new FileOutputStream(file)) {
@@ -35,7 +37,7 @@ public class Main {
         }
     }
 
-    public static Root parseXml(File file) throws ParserConfigurationException, SAXException, IOException {
+    private static Root parseXml(File file) throws ParserConfigurationException, SAXException, IOException {
         SAXParserFactory factory = SAXParserFactory.newInstance();
         SAXParser parser = factory.newSAXParser();
         MyHandler handler = new MyHandler();

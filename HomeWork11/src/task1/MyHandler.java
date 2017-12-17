@@ -66,7 +66,7 @@ public class MyHandler extends DefaultHandler {
         }
     }
 
-    public Root getRoot() {
+    Root getRoot() {
         return root;
     }
 }
