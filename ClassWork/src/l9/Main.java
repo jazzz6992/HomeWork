@@ -1,8 +1,14 @@
 package l9;
 
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import l9.entity.People;
 import l9.entity.Root;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -16,13 +22,15 @@ import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
-        String link = "http://kiparo.ru/t/test.xml";
-        File file = new File("/Users/vsevolodvisnevskij/IdeaProjects/HomeWork/ClassWork/src/l9/newfile.html");
-        URL url = new URL(link);
+    public static void main(String[] args) throws IOException, ParseException {
+        String linkJson = "http://kiparo.ru/t/test.json";
+        String linkXML = "http://kiparo.ru/t/test.xml";
+        File file = new File("/Users/vsevolodvisnevskij/IdeaProjects/HomeWork/ClassWork/src/l9/newfile.json");
+        URL url = new URL(linkJson);
         //почему не обойтись без HttpURLConnection. в URL есть метод openStream();
         //что вообще такое URL и HttpURLConnection
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -41,8 +49,66 @@ public class Main {
                     }
                 }
             }
-            parseXml();
+//            parseXml();
+            System.out.println(parseJson());
+            System.out.println(parseGson());
         }
+    }
+
+    //    public static Root parseGson() {
+//        Root root = null;
+//        try (BufferedReader reader = new BufferedReader(new FileReader("/Users/vsevolodvisnevskij/IdeaProjects/HomeWork/ClassWork/src/l9/newfile.json"))) {
+//            Gson gson = new Gson();
+//            root = gson.fromJson(reader, Root.class);
+//            return root;
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        return root;
+//    }
+    public static Root parseGson() {
+        Root root = null;
+        try (BufferedReader reader = new BufferedReader(new FileReader("/Users/vsevolodvisnevskij/IdeaProjects/HomeWork/ClassWork/src/l9/newfile.json"))) {
+            GsonBuilder builder = new GsonBuilder().registerTypeAdapter(Date.class, new DateGsonConverter());
+            Gson gson = builder.create();
+            root = gson.fromJson(reader, Root.class);
+            return root;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return root;
+    }
+
+    public static Root parseJson() throws IOException, ParseException {
+        Root root = new Root();
+        root.setPeople(new ArrayList<>());
+        JSONParser parser = new JSONParser();
+        try (FileReader reader = new FileReader("/Users/vsevolodvisnevskij/IdeaProjects/HomeWork/ClassWork/src/l9/newfile.json")) {
+            JSONObject jsonRoot = (JSONObject) parser.parse(reader);
+            String fileName = (String) jsonRoot.get("name");
+            root.setName(fileName);
+            JSONArray array = (JSONArray) jsonRoot.get("people");
+            for (int i = 0; i < array.size(); i++) {
+                JSONObject person = (JSONObject) array.get(i);
+                long age = (long) person.get("age");
+                long id = (long) person.get("id");
+                boolean isDegree = (Boolean) person.get("isDegree");
+                String name = (String) person.get("name");
+                String surname = (String) person.get("surname");
+                People people = new People();
+                people.setDegree(isDegree);
+                people.setId((int) id);
+                people.setAge((int) age);
+                people.setFirstName(name);
+                people.setSurname(surname);
+                root.getPeople().add(people);
+            }
+        }
+        return root;
     }
 
     public static void parseXml() {
@@ -84,7 +150,7 @@ public class Main {
             int id = Integer.parseInt(element.getElementsByTagName("id").item(0).getTextContent());
             Boolean isDegree = Boolean.valueOf(element.getElementsByTagName("name").item(0).getTextContent());
             People cur = new People();
-            cur.setName(name);
+            cur.setFirstName(name);
             cur.setSurname(surname);
             cur.setAge(age);
             cur.setId(id);
