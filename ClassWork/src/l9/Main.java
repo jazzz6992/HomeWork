@@ -3,6 +3,7 @@ package l9;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import l9.entity.Gender;
 import l9.entity.People;
 import l9.entity.Root;
 import org.json.simple.JSONArray;
@@ -21,6 +22,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -91,6 +93,12 @@ public class Main {
             JSONObject jsonRoot = (JSONObject) parser.parse(reader);
             String fileName = (String) jsonRoot.get("name");
             root.setName(fileName);
+            long genderId = (Long) jsonRoot.get("gender");
+            Gender gender = Gender.values()[(int) genderId];
+            root.setGender(gender);
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date date = sdf.parse((String) jsonRoot.get("date"));
+            root.setDate(date);
             JSONArray array = (JSONArray) jsonRoot.get("people");
             for (int i = 0; i < array.size(); i++) {
                 JSONObject person = (JSONObject) array.get(i);
@@ -107,6 +115,8 @@ public class Main {
                 people.setSurname(surname);
                 root.getPeople().add(people);
             }
+        } catch (java.text.ParseException e) {
+            e.printStackTrace();
         }
         return root;
     }
