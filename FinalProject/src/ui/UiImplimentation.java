@@ -15,7 +15,7 @@ public class UiImplimentation extends JFrame implements Ui, ChooseSourceListener
 
     public static void main(String[] args) {
         UiImplimentation ui = new UiImplimentation();
-        ui.setManager(new Manager(ui));
+        ui.manager = new Manager(ui);
         ui.setCurrentPanel(new ChooseSourcePanel(ui));
         ui.setContentPane(ui.getCurrentPanel().getMainPanel());
         ui.setSize(300, 100);
@@ -29,14 +29,6 @@ public class UiImplimentation extends JFrame implements Ui, ChooseSourceListener
 
     public void setCurrentPanel(CurrentPanel currentPanel) {
         this.currentPanel = currentPanel;
-    }
-
-    public void setManager(Manager manager) {
-        this.manager = manager;
-    }
-
-    public Manager getManager() {
-        return manager;
     }
 
     @Override

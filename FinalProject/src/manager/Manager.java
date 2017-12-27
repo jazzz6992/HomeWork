@@ -104,31 +104,16 @@ public class Manager implements DownloadCompleteListener, ParseCompleteListener,
         }
     }
 
-    public StockExchange getStockExchange() {
-        return stockExchange;
-    }
-
     @Override
     public void onSortSuccess(List<Stock> stocks) {
         stocksToDisplay = stocks;
         ui.print(stocksToDisplay);
     }
 
-
-    @Override
-    public void onSortFailed() {
-
-    }
-
     @Override
     public void onSearchSuccess(List<Stock> stocks) {
         stocksToDisplay = stocks;
         ui.print(stocks);
-    }
-
-    @Override
-    public void onSearchFailed() {
-
     }
 
     public void showAll() {
