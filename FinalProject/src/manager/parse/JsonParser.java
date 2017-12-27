@@ -3,6 +3,7 @@ package manager.parse;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import entity.StockExchange;
+import manager.listeners.ParseCompleteListener;
 
 import java.io.File;
 import java.io.FileNotFoundException;

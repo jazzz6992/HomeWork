@@ -1,5 +1,7 @@
 package manager.download;
 
+import manager.listeners.DownloadCompleteListener;
+
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -81,6 +83,8 @@ public class Downloader implements Runnable {
 
     @Override
     public void run() {
-        downloadFile(urlLink, path);
+        synchronized (listener) {
+            downloadFile(urlLink, path);
+        }
     }
 }

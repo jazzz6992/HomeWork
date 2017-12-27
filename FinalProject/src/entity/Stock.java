@@ -66,9 +66,7 @@ public class Stock {
         if (id != stock.id) return false;
         if (Double.compare(stock.bid, bid) != 0) return false;
         if (Double.compare(stock.minPrice, minPrice) != 0) return false;
-        if (Double.compare(stock.maxPrice, maxPrice) != 0) return false;
-        if (visible != stock.visible) return false;
-        return name != null ? name.equals(stock.name) : stock.name == null;
+        return Double.compare(stock.maxPrice, maxPrice) == 0 && visible == stock.visible && (name != null ? name.equals(stock.name) : stock.name == null);
     }
 
     @Override
@@ -89,13 +87,11 @@ public class Stock {
 
     @Override
     public String toString() {
-        return "Stock{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", bid=" + bid +
-                ", minPrice=" + minPrice +
-                ", maxPrice=" + maxPrice +
-                ", visible=" + visible +
-                '}';
+        return "\tid = " + getId() +
+                "\tname = " + getName() +
+                "\tbid = " + getBid() +
+                "\tmin price = " + getMinPrice() +
+                "\tmax price = " + getMaxPrice() +
+                "\n";
     }
 }

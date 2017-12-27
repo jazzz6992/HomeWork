@@ -2,6 +2,7 @@ package manager.parse;
 
 import entity.Stock;
 import entity.StockExchange;
+import manager.listeners.ParseCompleteListener;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;

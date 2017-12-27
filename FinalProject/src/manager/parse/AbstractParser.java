@@ -1,5 +1,7 @@
 package manager.parse;
 
+import manager.listeners.ParseCompleteListener;
+
 import java.io.File;
 
 public abstract class AbstractParser implements Runnable {
