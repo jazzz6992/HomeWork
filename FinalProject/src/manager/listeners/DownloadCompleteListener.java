@@ -5,5 +5,5 @@ import java.io.File;
 public interface DownloadCompleteListener {
     void onDownloadSuccess(File file);
 
-    void onDownloadFailed();
+    void onDownloadFailed(String message);
 }

@@ -20,22 +20,27 @@ public class Downloader implements Runnable {
     private void downloadFile(String link, String fileName) {
         File file = createFile(fileName);
         if (file != null) {
-            HttpURLConnection connection = createConnection(link);
-            if (connection != null) {
-                if (download(connection, file)) {
-                    listener.onDownloadSuccess(file);
+            try {
+                HttpURLConnection connection = createConnection(link);
+                if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    try {
+                        download(connection, file);
+                        listener.onDownloadSuccess(file);
+                    } catch (IOException e) {
+                        listener.onDownloadFailed(e.getMessage());
+                    }
                 } else {
-                    listener.onDownloadFailed();
+                    listener.onDownloadFailed("Response code is " + connection.getResponseCode());
                 }
-            } else {
-                listener.onDownloadFailed();
+            } catch (IOException e) {
+                listener.onDownloadFailed(e.getMessage());
             }
         } else {
-            listener.onDownloadFailed();
+            listener.onDownloadFailed("Can't create file");
         }
     }
 
-    private static File createFile(String fileName) {
+    private File createFile(String fileName) {
         File file = new File(fileName);
         if (!file.exists()) {
             try {
@@ -50,22 +55,12 @@ public class Downloader implements Runnable {
         return file;
     }
 
-    private static HttpURLConnection createConnection(String link) {
-        try {
-            URL url = new URL(link);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-            if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
-                return connection;
-            } else {
-                return null;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
+    private HttpURLConnection createConnection(String link) throws IOException {
+        URL url = new URL(link);
+        return (HttpURLConnection) url.openConnection();
     }
 
-    private static boolean download(HttpURLConnection connection, File file) {
+    private void download(HttpURLConnection connection, File file) throws IOException {
         try (InputStream is = connection.getInputStream()) {
             try (OutputStream os = new FileOutputStream(file)) {
                 byte[] buf = new byte[4096];
@@ -74,11 +69,7 @@ public class Downloader implements Runnable {
                     os.write(buf, 0, bufSize);
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
         }
-        return true;
     }
 
     @Override

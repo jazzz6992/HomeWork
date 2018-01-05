@@ -79,7 +79,7 @@ public class Manager implements DownloadCompleteListener, ParseCompleteListener,
     }
 
     @Override
-    public void onDownloadFailed() {
+    public void onDownloadFailed(String message) {
         ui.print("Failed");
     }
 
