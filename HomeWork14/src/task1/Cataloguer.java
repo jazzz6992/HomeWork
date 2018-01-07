@@ -20,7 +20,7 @@ public class Cataloguer {
 
     private Mp3Collection collection = new Mp3Collection();
     private Map<String, Set<AudioFile>> checkSumDuplicates = new HashMap<>();
-    private Map<String, Set<AudioFile>> tegInfoDuplicates = new HashMap<>();
+    private Map<String, Set<AudioFile>> tagInfoDuplicates = new HashMap<>();
     private CheckSumMaker checkSumMaker = new CheckSumMaker();
 
     public void createCollection(String[] dirs) {
@@ -54,7 +54,7 @@ public class Cataloguer {
                             album = createAlbumIfNotExist(albumName, artist);
                             sameSongsInAlbum = createSameSongSetIfNotExist(title, album);
                             if (!sameSongsInAlbum.isEmpty()) {
-                                addToTegInfoDuplicates(current, sameSongsInAlbum);
+                                addToTagInfoDuplicates(current, sameSongsInAlbum);
                                 addToChecksumDuplicates(current, sameSongsInAlbum);
                             }
                             sameSongsInAlbum.add(current);
@@ -65,7 +65,7 @@ public class Cataloguer {
                             System.out.println("I/O exception while reading file " + f.getAbsolutePath());
                             System.out.println(e.getMessage());
                         } catch (TagException e) {
-                            System.out.println("Teg exception while reading file " + f.getAbsolutePath());
+                            System.out.println("Tag exception while reading file " + f.getAbsolutePath());
                             System.out.println(e.getMessage());
                         } catch (ReadOnlyFileException e) {
                             System.out.println("Read only permission granted for file " + f.getAbsolutePath());
@@ -95,11 +95,11 @@ public class Cataloguer {
         return sb.toString();
     }
 
-    public String tegInfoDuplicatesToString() {
+    public String tagInfoDuplicatesToString() {
         StringBuilder sb = new StringBuilder();
         sb.append("Name duplicates:\n");
         for (Map.Entry<String, Set<AudioFile>> entry :
-                tegInfoDuplicates.entrySet()) {
+                tagInfoDuplicates.entrySet()) {
             sb.append("\tDuplicates for tag info ").append(entry.getKey()).append(":\n");
             for (AudioFile file :
                     entry.getValue()) {
@@ -132,10 +132,10 @@ public class Cataloguer {
         return album.getSongs().computeIfAbsent(title, k -> new HashSet<>());
     }
 
-    private void addToTegInfoDuplicates(AudioFile fileToAdd, Set<AudioFile> sameSongsInAlbum) {
+    private void addToTagInfoDuplicates(AudioFile fileToAdd, Set<AudioFile> sameSongsInAlbum) {
         Tag tag = fileToAdd.getTag();
-        String fullTegInfo = tag.getFirst(FieldKey.ARTIST) + ", " + tag.getFirst(FieldKey.ALBUM) + ", " + tag.getFirst(FieldKey.TITLE);
-        Set<AudioFile> curNameDups = tegInfoDuplicates.computeIfAbsent(fullTegInfo, k -> new HashSet<>());
+        String fullTagInfo = tag.getFirst(FieldKey.ARTIST) + ", " + tag.getFirst(FieldKey.ALBUM) + ", " + tag.getFirst(FieldKey.TITLE);
+        Set<AudioFile> curNameDups = tagInfoDuplicates.computeIfAbsent(fullTagInfo, k -> new HashSet<>());
         curNameDups.add(fileToAdd);
         curNameDups.addAll(sameSongsInAlbum);
     }

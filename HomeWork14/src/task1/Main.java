@@ -6,7 +6,7 @@ public class Main {
         Cataloguer cataloguer = new Cataloguer();
         cataloguer.createCollection(args);
         System.out.println(cataloguer.getCollection().toString());
-        System.out.println(cataloguer.tegInfoDuplicatesToString());
+        System.out.println(cataloguer.tagInfoDuplicatesToString());
         System.out.println(cataloguer.checkSumDuplicatesToString());
     }
 }
