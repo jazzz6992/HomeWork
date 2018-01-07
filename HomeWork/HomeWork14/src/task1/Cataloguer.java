@@ -18,7 +18,7 @@ import java.util.Set;
 
 public class Cataloguer {
 
-    private Mp3Collection collection = new Mp3Collection();
+    private MusicCollection collection = new MusicCollection();
     private Map<String, Set<AudioFile>> checkSumDuplicates = new HashMap<>();
     private Map<String, Set<AudioFile>> tagInfoDuplicates = new HashMap<>();
     private CheckSumMaker checkSumMaker = new CheckSumMaker();
@@ -177,7 +177,7 @@ public class Cataloguer {
         return false;
     }
 
-    public Mp3Collection getCollection() {
+    public MusicCollection getCollection() {
         return collection;
     }
 }

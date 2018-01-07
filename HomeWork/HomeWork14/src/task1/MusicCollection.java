@@ -3,10 +3,10 @@ package task1;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Mp3Collection {
+public class MusicCollection {
     private Map<String, Artist> artists;
 
-    Mp3Collection() {
+    MusicCollection() {
         artists = new HashMap<>();
     }
 
