@@ -56,12 +56,9 @@ public class Cataloguer {
                             String artistName = tag.getFirst(FieldKey.ARTIST);
                             String albumName = tag.getFirst(FieldKey.ALBUM);
                             String title = tag.getFirst(FieldKey.TITLE);
-                            Artist artist;
-                            Album album;
-                            Set<AudioFile> sameSongsInAlbum;
-                            artist = createArtistIfNotExist(artistName);
-                            album = createAlbumIfNotExist(albumName, artist);
-                            sameSongsInAlbum = createSameSongSetIfNotExist(title, album);
+                            Artist artist = createArtistIfNotExist(artistName);
+                            Album album = createAlbumIfNotExist(albumName, artist);
+                            Set<AudioFile> sameSongsInAlbum = createSameSongSetIfNotExist(title, album);
                             if (!sameSongsInAlbum.isEmpty()) {
                                 addToTagInfoDuplicates(current, sameSongsInAlbum);
                                 addToChecksumDuplicates(current, sameSongsInAlbum);
