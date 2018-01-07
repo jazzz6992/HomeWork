@@ -41,43 +41,43 @@ public class Cataloguer {
                     createCollection(f);
                 } else if (f.isFile()) {
 //                    if (f.getName().toLowerCase().endsWith(".mp3")) {
-                        try {
-                            AudioFile current = AudioFileIO.read(f);
-                            Tag tag = current.getTag();
-                            String artistName = tag.getFirst(FieldKey.ARTIST);
-                            String albumName = tag.getFirst(FieldKey.ALBUM);
-                            String title = tag.getFirst(FieldKey.TITLE);
-                            Artist artist;
-                            Album album;
-                            Set<AudioFile> sameSongsInAlbum;
-                            artist = createArtistIfNotExist(artistName);
-                            album = createAlbumIfNotExist(albumName, artist);
-                            sameSongsInAlbum = createSameSongSetIfNotExist(title, album);
-                            if (!sameSongsInAlbum.isEmpty()) {
-                                addToTagInfoDuplicates(current, sameSongsInAlbum);
-                                addToChecksumDuplicates(current, sameSongsInAlbum);
-                            }
-                            sameSongsInAlbum.add(current);
-                        } catch (CannotReadException e) {
-                            System.out.println("Can't read file " + f.getAbsolutePath());
-                            System.out.println(e.getMessage());
-                        } catch (IOException e) {
-                            System.out.println("I/O exception while reading file " + f.getAbsolutePath());
-                            System.out.println(e.getMessage());
-                        } catch (TagException e) {
-                            System.out.println("Tag exception while reading file " + f.getAbsolutePath());
-                            System.out.println(e.getMessage());
-                        } catch (ReadOnlyFileException e) {
-                            System.out.println("Read only permission granted for file " + f.getAbsolutePath());
-                            System.out.println(e.getMessage());
-                        } catch (InvalidAudioFrameException e) {
-                            System.out.println("Invalid audio frame for file " + f.getAbsolutePath());
-                            System.out.println(e.getMessage());
+                    try {
+                        AudioFile current = AudioFileIO.read(f);
+                        Tag tag = current.getTag();
+                        String artistName = tag.getFirst(FieldKey.ARTIST);
+                        String albumName = tag.getFirst(FieldKey.ALBUM);
+                        String title = tag.getFirst(FieldKey.TITLE);
+                        Artist artist;
+                        Album album;
+                        Set<AudioFile> sameSongsInAlbum;
+                        artist = createArtistIfNotExist(artistName);
+                        album = createAlbumIfNotExist(albumName, artist);
+                        sameSongsInAlbum = createSameSongSetIfNotExist(title, album);
+                        if (!sameSongsInAlbum.isEmpty()) {
+                            addToTagInfoDuplicates(current, sameSongsInAlbum);
+                            addToChecksumDuplicates(current, sameSongsInAlbum);
                         }
+                        sameSongsInAlbum.add(current);
+                    } catch (CannotReadException e) {
+                        System.out.println("Can't read file " + f.getAbsolutePath());
+                        System.out.println(e.getMessage());
+                    } catch (IOException e) {
+                        System.out.println("I/O exception while reading file " + f.getAbsolutePath());
+                        System.out.println(e.getMessage());
+                    } catch (TagException e) {
+                        System.out.println("Tag exception while reading file " + f.getAbsolutePath());
+                        System.out.println(e.getMessage());
+                    } catch (ReadOnlyFileException e) {
+                        System.out.println("Read only permission granted for file " + f.getAbsolutePath());
+                        System.out.println(e.getMessage());
+                    } catch (InvalidAudioFrameException e) {
+                        System.out.println("Invalid audio frame for file " + f.getAbsolutePath());
+                        System.out.println(e.getMessage());
                     }
                 }
             }
         }
+    }
 //    }
 
     public String checkSumDuplicatesToString() {
@@ -163,6 +163,5 @@ public class Cataloguer {
     public Mp3Collection getCollection() {
         return collection;
     }
-
 
 }
