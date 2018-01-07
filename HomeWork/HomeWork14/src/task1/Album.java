@@ -27,8 +27,10 @@ public class Album {
                 sb.append("\t\t").append(entry.getKey())
                         .append(", ")
                         .append("duration = ")
-                        .append(file.getAudioHeader().getTrackLength())
-                        .append(" seconds, ")
+                        .append(file.getAudioHeader().getTrackLength() / 60)
+                        .append(":")
+                        .append(String.format("%02d", file.getAudioHeader().getTrackLength() % 60))
+                        .append(", ")
                         .append(file.getFile().getAbsolutePath())
                         .append("\n");
             }

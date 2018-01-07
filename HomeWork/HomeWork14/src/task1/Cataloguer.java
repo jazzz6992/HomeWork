@@ -40,7 +40,7 @@ public class Cataloguer {
                 if (f.isDirectory()) {
                     createCollection(f);
                 } else if (f.isFile()) {
-                    if (f.getName().toLowerCase().endsWith(".mp3")) {
+//                    if (f.getName().toLowerCase().endsWith(".mp3")) {
                         try {
                             AudioFile current = AudioFileIO.read(f);
                             Tag tag = current.getTag();
@@ -78,7 +78,7 @@ public class Cataloguer {
                 }
             }
         }
-    }
+//    }
 
     public String checkSumDuplicatesToString() {
         StringBuilder sb = new StringBuilder();
