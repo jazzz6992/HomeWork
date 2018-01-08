@@ -39,52 +39,67 @@ public class Cataloguer {
     private void createCollection(File dir) {
         File[] childs = dir.listFiles();
         if (childs != null) {
-            for (File f : childs) {
-                if (f.isDirectory()) {
-                    createCollection(f);
-                } else if (f.isFile()) {
-                    String fileNameSuffix = null;
-                    try {
-                        fileNameSuffix = f.getName().toLowerCase().substring(f.getName().lastIndexOf("."));
-                    } catch (StringIndexOutOfBoundsException e) {
-                        System.err.println("Can't read format for file " + f.getAbsolutePath());
-                    }
+            for (File fileToProcess : childs) {
+                if (fileToProcess.isDirectory()) {
+                    createCollection(fileToProcess);
+                } else if (fileToProcess.isFile()) {
+                    String fileNameSuffix = getFileType(fileToProcess);
                     if (fileNameSuffix != null && checkFormats(fileNameSuffix)) {
-                        try {
-                            AudioFile current = AudioFileIO.read(f);
-                            Tag tag = current.getTag();
-                            String artistName = tag.getFirst(FieldKey.ARTIST);
-                            String albumName = tag.getFirst(FieldKey.ALBUM);
-                            String title = tag.getFirst(FieldKey.TITLE);
-                            Artist artist = createArtistIfNotExist(artistName);
-                            Album album = createAlbumIfNotExist(albumName, artist);
-                            Set<AudioFile> sameSongsInAlbum = createSameSongSetIfNotExist(title, album);
-                            if (!sameSongsInAlbum.isEmpty()) {
-                                addToTagInfoDuplicates(current, sameSongsInAlbum);
-                                addToChecksumDuplicates(current, sameSongsInAlbum);
-                            }
-                            sameSongsInAlbum.add(current);
-                            counter++;
-                        } catch (CannotReadException e) {
-                            System.out.println("Can't read file " + f.getAbsolutePath());
-                            System.out.println(e.getMessage());
-                        } catch (IOException e) {
-                            System.out.println("I/O exception while reading file " + f.getAbsolutePath());
-                            System.out.println(e.getMessage());
-                        } catch (TagException e) {
-                            System.out.println("Tag exception while reading file " + f.getAbsolutePath());
-                            System.out.println(e.getMessage());
-                        } catch (ReadOnlyFileException e) {
-                            System.out.println("Read only permission granted for file " + f.getAbsolutePath());
-                            System.out.println(e.getMessage());
-                        } catch (InvalidAudioFrameException e) {
-                            System.out.println("Invalid audio frame for file " + f.getAbsolutePath());
-                            System.out.println(e.getMessage());
-                        }
+                        processFile(fileToProcess);
                     }
                 }
             }
         }
+    }
+
+    private String getFileType(File file) {
+        String fileNameSuffix = null;
+        try {
+            fileNameSuffix = file.getName().toLowerCase().substring(file.getName().lastIndexOf("."));
+        } catch (StringIndexOutOfBoundsException e) {
+            System.err.println("Can't read format for file " + file.getAbsolutePath());
+        }
+        return fileNameSuffix;
+    }
+
+    private void processFile(File fileToProcess) {
+        try {
+            AudioFile current = AudioFileIO.read(fileToProcess);
+            String[] tagInfo = getTagInformation(current);
+            Artist artist = createArtistIfNotExist(tagInfo[0]);
+            Album album = createAlbumIfNotExist(tagInfo[1], artist);
+            Set<AudioFile> sameSongsInAlbum = createSameSongSetIfNotExist(tagInfo[2], album);
+            if (!sameSongsInAlbum.isEmpty()) {
+                addToTagInfoDuplicates(current, sameSongsInAlbum);
+                addToChecksumDuplicates(current, sameSongsInAlbum);
+            }
+            sameSongsInAlbum.add(current);
+            counter++;
+        } catch (CannotReadException e) {
+            System.out.println("Can't read file " + fileToProcess.getAbsolutePath());
+            System.out.println(e.getMessage());
+        } catch (IOException e) {
+            System.out.println("I/O exception while reading file " + fileToProcess.getAbsolutePath());
+            System.out.println(e.getMessage());
+        } catch (TagException e) {
+            System.out.println("Tag exception while reading file " + fileToProcess.getAbsolutePath());
+            System.out.println(e.getMessage());
+        } catch (ReadOnlyFileException e) {
+            System.out.println("Read only permission granted for file " + fileToProcess.getAbsolutePath());
+            System.out.println(e.getMessage());
+        } catch (InvalidAudioFrameException e) {
+            System.out.println("Invalid audio frame for file " + fileToProcess.getAbsolutePath());
+            System.out.println(e.getMessage());
+        }
+    }
+
+    private String[] getTagInformation(AudioFile audioFile) {
+        String[] tagInfo = new String[3];
+        Tag tag = audioFile.getTag();
+        tagInfo[0] = tag.getFirst(FieldKey.ARTIST);
+        tagInfo[1] = tag.getFirst(FieldKey.ALBUM);
+        tagInfo[2] = tag.getFirst(FieldKey.TITLE);
+        return tagInfo;
     }
 
     public String checkSumDuplicatesToString() {
