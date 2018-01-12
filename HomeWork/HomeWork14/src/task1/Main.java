@@ -8,6 +8,5 @@ public class Main {
         System.out.println(cataloguer.getCollection().toString());
         System.out.println(cataloguer.tagInfoDuplicatesToString());
         System.out.println(cataloguer.checkSumDuplicatesToString());
-
     }
 }
