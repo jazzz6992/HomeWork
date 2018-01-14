@@ -19,49 +19,54 @@ public abstract class Atm implements Withdrawable, BalanceInformation, Depositab
     }
 
     public boolean withdraw(int amount) {
-        if (total < amount) {
-            System.out.println("Нехватает денег");
-            return false;
-        }
-        int tmpAmount = amount;
-        List<Denomination> tmp = AtmHelper.cloneDenominations(denominations);
-        Map<Integer, Integer> toPrint = new HashMap<>();
+        List<Integer> availaible = new LinkedList<>();
         for (int i = 0; i < denominations.size(); i++) {
-            if (denominations.get(i).getDenomination() > tmpAmount) {
-                continue;
+            for (int j = 0; j < denominations.get(i).getAmount(); j++) {
+                availaible.add(denominations.get(i).getDenomination());
             }
-            int curAmount = tmp.get(i).getAmount();
-            if (curAmount <= 0) {
-                continue;
-            } else {
-                int preferedAmount = tmpAmount / denominations.get(i).getDenomination();
-                if (preferedAmount > curAmount) {
-                    tmpAmount -= curAmount * denominations.get(i).getDenomination();
-                    tmp.get(i).setAmount(0);
-                    toPrint.put(denominations.get(i).getDenomination(), curAmount);
-                } else {
-                    tmpAmount -= preferedAmount * denominations.get(i).getDenomination();
-                    tmp.get(i).setAmount(curAmount - preferedAmount);
-                    toPrint.put(denominations.get(i).getDenomination(), preferedAmount);
+        }
+        Map<Integer, Integer> result = new HashMap<>();
+        withdraw(amount, availaible, 0, result);
+        if (result.size() != 0) {
+            System.out.println("Withdraw:\n");
+            for (Map.Entry<Integer, Integer> entry :
+                    result.entrySet()) {
+                System.out.println("Denomination = " + entry.getKey() + " amount = " + entry.getValue() + "\n");
+                for (Denomination d :
+                        denominations) {
+                    if (d.getDenomination() == entry.getKey()) {
+                        d.setAmount(d.getAmount() - entry.getValue());
+                        break;
+                    }
                 }
             }
-        }
-        if (tmpAmount != 0) {
-            System.out.println("Ошибка снятия");
-            printTotal();
-            return false;
-        } else {
-            System.out.println("Снятие произведено");
-            denominations = tmp;
-            total -= amount;
-            printTotal();
-            System.out.println("Выдано купюр:");
-            for (Map.Entry<Integer, Integer> e :
-                    toPrint.entrySet()) {
-                System.out.println("Номинал:" + e.getKey() + " - Кол-во: " + e.getValue());
-            }
             return true;
+        } else {
+            return false;
         }
+    }
+
+    private Map<Integer, Integer> withdraw(int amount, List<Integer> availaible, int count, Map<Integer, Integer> map) {
+        for (int i = count; i < availaible.size(); i++) {
+            if (amount < availaible.get(i)) {
+                continue;
+            } else if (amount > availaible.get(i)) {
+                withdraw(amount - availaible.get(i), availaible, count + 1, map);
+                if (map.size() != 0) {
+                    if (map.containsKey(availaible.get(i))) {
+                        map.put(availaible.get(i), map.get(availaible.get(i)) + 1);
+                        return map;
+                    } else {
+                        map.put(availaible.get(i), 1);
+                        return map;
+                    }
+                }
+            } else {
+                map.put(availaible.get(i), 1);
+                return map;
+            }
+        }
+        return map;
     }
 
     public abstract void printTotal();
@@ -95,12 +100,11 @@ public abstract class Atm implements Withdrawable, BalanceInformation, Depositab
         this.denominations = denominations;
     }
 
-    public boolean deposit(int amount) {
+    public void deposit(int denom, int amount) {
         if (depositor != null) {
-            return depositor.deposit(amount);
+            depositor.deposit(denom, amount);
         } else {
             System.out.println("Банкомат не поддерживает пополнение");
-            return false;
         }
     }
 
@@ -116,22 +120,16 @@ public abstract class Atm implements Withdrawable, BalanceInformation, Depositab
         }
 
         @Override
-        public boolean deposit(int amount) {
-            int amountTmp = amount;
-            List<Denomination> denominationsTmp = AtmHelper.cloneDenominations(denominations);
-            for (int i = 0; i < denominationsTmp.size(); i++) {
-                denominationsTmp.get(i).setAmount(denominationsTmp.get(i).getAmount() + amountTmp / denominationsTmp.get(i).getDenomination());
-                amountTmp %= denominationsTmp.get(i).getDenomination();
+        public void deposit(int denom, int amount) {
+            for (Denomination d :
+                    denominations) {
+                if (d.getDenomination() == denom) {
+                    d.setAmount(d.getAmount() + amount);
+                    return;
+                }
             }
-            if (amountTmp != 0) {
-                System.out.println("Неудача");
-                return false;
-            } else {
-                total += amount;
-                denominations = denominationsTmp;
-                System.out.println("Пополнение произведено");
-                return true;
-            }
+            Denomination denomination = new Denomination(denom, amount);
+            denominations.add(denomination);
         }
     }
 }

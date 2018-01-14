@@ -19,7 +19,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class Main2 {
+public class FindTheSame {
     private Map<String, Set<File>> map = new HashMap<>();
     private Document document = null;
 
@@ -51,13 +51,16 @@ public class Main2 {
                 add(f);
             }
         } else if (file.isFile()) {
-            String key = file.getName().toLowerCase().substring(file.getName().lastIndexOf("."));
-            if (!map.containsKey(key)) {
-                Set<File> set = new HashSet<>();
-                set.add(file);
-                map.put(key, set);
-            } else {
-                map.get(key).add(file);
+            int idx = file.getName().lastIndexOf(".");
+            if (idx != -1) {
+                String key = file.getName().toLowerCase().substring(idx);
+                if (!map.containsKey(key)) {
+                    Set<File> set = new HashSet<>();
+                    set.add(file);
+                    map.put(key, set);
+                } else {
+                    map.get(key).add(file);
+                }
             }
         }
     }
@@ -79,7 +82,7 @@ public class Main2 {
     }
 
     public static void main(String[] args) throws IOException, TransformerException, ParserConfigurationException {
-        Main2 main2 = new Main2();
-        main2.process(args);
+        FindTheSame findTheSame = new FindTheSame();
+        findTheSame.process(args);
     }
 }

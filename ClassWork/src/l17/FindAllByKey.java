@@ -18,7 +18,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 
-public class Main {
+public class FindAllByKey {
     private String key;
     Document document;
 
@@ -53,7 +53,8 @@ public class Main {
                 process(f);
             }
         } else if (current.isFile()) {
-            if (current.getName().toLowerCase().substring(current.getName().lastIndexOf(".")).equals(key)) {
+            int idx = current.getName().lastIndexOf(".");
+            if (idx != -1 && current.getName().toLowerCase().substring(idx).equals(key)) {
                 Element element = document.getDocumentElement();
                 Element file = document.createElement("file");
                 Element name = document.createElement("name");
@@ -75,7 +76,7 @@ public class Main {
     }
 
     public static void main(String[] args) throws TransformerException, IOException {
-        Main main = new Main();
-        main.makeXml(args);
+        FindAllByKey findAllByKey = new FindAllByKey();
+        findAllByKey.makeXml(args);
     }
 }
