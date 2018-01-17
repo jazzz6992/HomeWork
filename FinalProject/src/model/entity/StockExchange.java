@@ -1,4 +1,4 @@
-package entity;
+package model.entity;
 
 import java.util.Date;
 import java.util.List;
@@ -64,11 +64,13 @@ public class StockExchange {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(getName()).append("\n").append(getLocation()).append("\n").append(getDate().toString()).append("\n").append("Stocks:\n");
-        for (Stock s :
-                getStock()) {
-            sb.append(s.toString());
-        }
+        sb.append(getName())
+                .append("\n")
+                .append(getLocation())
+                .append("\n")
+                .append(getDate().toString())
+                .append("\n")
+                .append("Stocks:\n");
         return sb.toString();
     }
 }

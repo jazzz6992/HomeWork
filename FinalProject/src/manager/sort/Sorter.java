@@ -1,21 +1,27 @@
 package manager.sort;
 
-import entity.Stock;
 import manager.buttonChoices.Action;
-import manager.listeners.SortCompleteListener;
+import manager.listeners.ListForPrintChangeListener;
+import model.Model;
+import model.entity.Stock;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 public class Sorter implements Runnable {
-    private SortCompleteListener listener;
-    private List<Stock> stocks;
+    private ListForPrintChangeListener listener;
+    private final Model model;
     private Comparator<Stock> comparator;
 
-    public Sorter(SortCompleteListener listener, List<Stock> stocks, Action action) {
+    /*
+    при создании инициализирует компаратор нужным, в зависимости от выбора пользователя и
+    далее использует его
+     */
+
+    public Sorter(ListForPrintChangeListener listener, Model model, Action action) {
         this.listener = listener;
-        this.stocks = new ArrayList<>(stocks);
+        this.model = model;
         switch (action) {
             case SORT_BY_NAME:
                 comparator = new Comparator<Stock>() {
@@ -36,10 +42,23 @@ public class Sorter implements Runnable {
         }
     }
 
-
     @Override
     public void run() {
-        stocks.sort(comparator);
-        listener.onSortSuccess(stocks);
+        /*
+        в случае, если данные еще не готовы, ждет оповещения.
+        затем ищет соответствующие ключу акции из списка для отображения, формирует из них новый
+        список и оповещает слушателя по готовности
+         */
+        synchronized (model) {
+            while (model.getStocksToDisplay() == null) {
+                try {
+                    model.wait();
+                } catch (InterruptedException e) {
+                }
+            }
+            List<Stock> stocks = new ArrayList<>(model.getStocksToDisplay());
+            stocks.sort(comparator);
+            listener.onListForPrintChanged(stocks);
+        }
     }
 }

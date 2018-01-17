@@ -1,4 +1,4 @@
-package entity;
+package model.entity;
 
 public class Stock {
     private int id;
@@ -87,11 +87,17 @@ public class Stock {
 
     @Override
     public String toString() {
-        return "\tid = " + getId() +
-                "\tname = " + getName() +
-                "\tbid = " + getBid() +
-                "\tmin price = " + getMinPrice() +
-                "\tmax price = " + getMaxPrice() +
-                "\n";
+        StringBuilder sb = new StringBuilder();
+        sb.append("\tid = ")
+                .append(getId())
+                .append("\tname = ")
+                .append(getName())
+                .append("\tbid = ")
+                .append(getBid())
+                .append("\tmin price = ")
+                .append(getMinPrice())
+                .append("\tmax price = ").append(getMaxPrice())
+                .append("\n");
+        return sb.toString();
     }
 }

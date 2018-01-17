@@ -2,8 +2,9 @@ package manager.parse;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import entity.StockExchange;
 import manager.listeners.ParseCompleteListener;
+import model.Model;
+import model.entity.StockExchange;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,10 +13,11 @@ import java.util.Date;
 
 public class JsonParser extends AbstractParser {
 
-    public JsonParser(ParseCompleteListener listener, File file) {
-        super(listener, file);
+    public JsonParser(ParseCompleteListener listener, Model model) {
+        super(listener, model);
     }
 
+    //парсит данные из файла и оповещает слушателя в случае успеха или неудачи
     @Override
     public void parse(File sourse) {
         StockExchange stockExchange;
@@ -26,13 +28,7 @@ public class JsonParser extends AbstractParser {
             stockExchange = gson.fromJson(new FileReader(sourse), StockExchange.class);
             getListener().onParseSuccess(stockExchange);
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            getListener().onParseFailed();
+            getListener().onParseFailed(e.getMessage());
         }
-    }
-
-    @Override
-    public void run() {
-        parse(getFile());
     }
 }

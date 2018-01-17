@@ -1,34 +1,52 @@
 package manager.search;
 
-import entity.Stock;
-import manager.listeners.SearchCompleteListener;
+import manager.listeners.ListForPrintChangeListener;
+import model.Model;
+import model.entity.Stock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Searcher implements Runnable {
 
-    private SearchCompleteListener listener;
-    private String key;
-    private List<Stock> stocks;
+    private ListForPrintChangeListener listener;
+    private Pattern pattern;
+    private Matcher matcher;
+    private final Model model;
 
-    public Searcher(SearchCompleteListener listener, String key, List<Stock> stocks) {
+    public Searcher(ListForPrintChangeListener listener, String key, Model model) {
         this.listener = listener;
-        this.key = key;
-        this.stocks = stocks;
+        //для поиска создается паттерн, содержащий ключ с любым предшествующим и последующим кол-вом символов
+        pattern = Pattern.compile("^.*" + key + ".*$");
+        this.model = model;
     }
 
     @Override
     public void run() {
-        synchronized (listener) {
+        /*
+        в случае, если данные еще не готовы, ждет оповещения.
+        затем ищет соответствующие ключу акции из списка для отображения, формирует из них новый
+        список и оповещает слушателя по готовности
+         */
+        synchronized (model) {
+            while (model.getStocksToDisplay() == null) {
+                try {
+                    model.wait();
+                } catch (InterruptedException e) {
+                }
+            }
+            List<Stock> stocks = model.getStocksToDisplay();
             List<Stock> result = new ArrayList<>();
             for (Stock s :
                     stocks) {
-                if (s.getName().toLowerCase().contains(key.toLowerCase())) {
+                matcher = pattern.matcher(s.getName().toLowerCase());
+                if (matcher.matches()) {
                     result.add(s);
                 }
             }
-            listener.onSearchSuccess(result);
+            listener.onListForPrintChanged(result);
         }
     }
 }

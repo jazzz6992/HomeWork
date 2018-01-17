@@ -1,16 +1,21 @@
 package manager.parse;
 
 import manager.listeners.ParseCompleteListener;
+import model.Model;
 
 import java.io.File;
 
 public abstract class AbstractParser implements Runnable {
+    /*
+    в соответствии с полиморфизмом все данные и методы парсера определены в
+    абстрактном классе. сам метод parse реализован в конкретных парсерах
+     */
     private ParseCompleteListener listener;
-    private File file;
+    private final Model model;
 
-    public AbstractParser(ParseCompleteListener listener, File file) {
+    public AbstractParser(ParseCompleteListener listener, Model model) {
         this.listener = listener;
-        this.file = file;
+        this.model = model;
     }
 
     abstract void parse(File sourse);
@@ -19,7 +24,14 @@ public abstract class AbstractParser implements Runnable {
         return listener;
     }
 
-    public File getFile() {
-        return file;
+    public Model getModel() {
+        return model;
+    }
+
+    @Override
+    public void run() {
+        synchronized (model) {
+            parse(model.getFile());
+        }
     }
 }

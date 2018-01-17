@@ -14,6 +14,7 @@ public class ChooseSourcePanel implements CurrentPanel {
     private JButton xmlButton;
     private JTextArea text;
 
+    //в конструкторе устанавливаем слушателя для кнопок и задаем желаемое поведение при нажатии
     public ChooseSourcePanel(ChooseSourceListener listener) {
         this.listener = listener;
         text.setText("Выберите источник данных:");

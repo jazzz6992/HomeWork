@@ -20,6 +20,7 @@ public class ContentPanel implements CurrentPanel {
     private JScrollPane scrollPane;
     private ChooseActionListener listener;
 
+    //в конструкторе устанавливаем слушателя для кнопок и задаем желаемое поведение при нажатии
     public ContentPanel(ChooseActionListener listener) {
         this.listener = listener;
         sortByPriceButton.addActionListener(new ActionListener() {

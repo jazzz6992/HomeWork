@@ -1,26 +1,25 @@
 package ui;
 
-import entity.Stock;
-import entity.StockExchange;
 import manager.Manager;
 import manager.buttonChoices.Action;
 import manager.buttonChoices.Source;
 
 import javax.swing.*;
-import java.util.List;
 
 public class UiImplimentation extends JFrame implements Ui, ChooseSourceListener, ChooseActionListener {
     private Manager manager;
+    //панель, испоьзуемая в JFrame в данный момент
     private CurrentPanel currentPanel;
 
-    public static void main(String[] args) {
-        UiImplimentation ui = new UiImplimentation();
-        ui.manager = new Manager(ui);
-        ui.setCurrentPanel(new ChooseSourcePanel(ui));
-        ui.setContentPane(ui.getCurrentPanel().getMainPanel());
-        ui.setSize(300, 100);
-        ui.setVisible(true);
-        ui.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+    //инициализация пользовательского интерфейса и добавление в менеджер ссылки на него
+    public void initializeUI() {
+        manager = Manager.getInstance();
+        manager.setUi(this);
+        setCurrentPanel(new ChooseSourcePanel(this));
+        setContentPane(getCurrentPanel().getMainPanel());
+        setSize(300, 100);
+        setVisible(true);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     public CurrentPanel getCurrentPanel() {
@@ -32,25 +31,11 @@ public class UiImplimentation extends JFrame implements Ui, ChooseSourceListener
     }
 
     @Override
-    public void print(String stocks) {
-        currentPanel.getContentArea().setText(stocks);
+    public void print(String content) {
+        currentPanel.getContentArea().setText(content);
     }
 
-    @Override
-    public void print(StockExchange stockExchange) {
-        currentPanel.getContentArea().setText(stockExchange.toString());
-    }
-
-    @Override
-    public void print(List<Stock> list) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Stock s :
-                list) {
-            stringBuilder.append(s.toString());
-        }
-        currentPanel.getContentArea().setText(stringBuilder.toString());
-    }
-
+    //устанавливает в JFrame панель содержимого и запускает загрузку данных с последующим парсингом
     @Override
     public void onChooseSourceMade(Source source) {
         currentPanel = new ContentPanel(this);
@@ -59,6 +44,11 @@ public class UiImplimentation extends JFrame implements Ui, ChooseSourceListener
         manager.getFile(source);
     }
 
+    /*
+      в зависимости от выбора пользователя запускает обработку
+      данных или меняет панель на панель выбора источника данных (в этом случае обнуляет
+      поля менеджера)
+     */
     @Override
     public void onChooseActionMade(Action action) {
         if (action == Action.SEARCH) {

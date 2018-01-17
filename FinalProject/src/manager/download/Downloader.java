@@ -10,18 +10,28 @@ public class Downloader implements Runnable {
     private String urlLink;
     private String path;
     private DownloadCompleteListener listener;
+    private final Object monitor;
 
-    public Downloader(String urlLink, String path, DownloadCompleteListener listener) {
+    /*
+    конструктор, с параметрами, необходимыми, для загрузки файла, так же принимает объект-монитор,
+    используемый для синхронизации (менеджер передает Model)
+     */
+    public Downloader(String urlLink, String path, DownloadCompleteListener listener, Object monitor) {
         this.urlLink = urlLink;
         this.path = path;
         this.listener = listener;
+        this.monitor = monitor;
     }
 
-    private void downloadFile(String link, String fileName) {
-        File file = createFile(fileName);
+    /*
+    создает файл и пытается загрузить в него данные из интернета. по завершении
+    вызывает метод слушателя в зависимости от результата выполнения
+     */
+    private void downloadFile() {
+        File file = createFile(path);
         if (file != null) {
             try {
-                HttpURLConnection connection = createConnection(link);
+                HttpURLConnection connection = createConnection(urlLink);
                 if (connection.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     try {
                         download(connection, file);
@@ -40,6 +50,10 @@ public class Downloader implements Runnable {
         }
     }
 
+    /*
+    создает файл по указанному адресу, если его еще не существует и возвращает объект этого файла.
+    в случае, если создание файла невозможно, возвращает null
+     */
     private File createFile(String fileName) {
         File file = new File(fileName);
         if (!file.exists()) {
@@ -60,6 +74,9 @@ public class Downloader implements Runnable {
         return (HttpURLConnection) url.openConnection();
     }
 
+    /*
+    скафивает данные из интернета в переданный файл
+     */
     private void download(HttpURLConnection connection, File file) throws IOException {
         try (InputStream is = connection.getInputStream()) {
             try (OutputStream os = new FileOutputStream(file)) {
@@ -74,8 +91,8 @@ public class Downloader implements Runnable {
 
     @Override
     public void run() {
-        synchronized (listener) {
-            downloadFile(urlLink, path);
+        synchronized (monitor) {
+            downloadFile();
         }
     }
 }

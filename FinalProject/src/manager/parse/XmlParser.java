@@ -1,8 +1,9 @@
 package manager.parse;
 
-import entity.Stock;
-import entity.StockExchange;
 import manager.listeners.ParseCompleteListener;
+import model.Model;
+import model.entity.Stock;
+import model.entity.StockExchange;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -21,10 +22,11 @@ import java.util.Date;
 public class XmlParser extends AbstractParser {
     public static final String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss X";
 
-    public XmlParser(ParseCompleteListener listener, File file) {
-        super(listener, file);
+    public XmlParser(ParseCompleteListener listener, Model model) {
+        super(listener, model);
     }
 
+    //парсит данные из файла и оповещает слушателя в случае успеха или неудачи
     @Override
     public void parse(File sourse) {
         StockExchange stockExchange = new StockExchange();
@@ -64,14 +66,8 @@ public class XmlParser extends AbstractParser {
                 stockExchange.getStock().add(stock);
             }
         } catch (ParserConfigurationException | SAXException | IOException | ParseException e) {
-            e.printStackTrace();
-            getListener().onParseFailed();
+            getListener().onParseFailed(e.getMessage());
         }
         getListener().onParseSuccess(stockExchange);
-    }
-
-    @Override
-    public void run() {
-        parse(getFile());
     }
 }

@@ -1,36 +1,55 @@
 package manager;
 
-import entity.Stock;
-import entity.StockExchange;
 import manager.buttonChoices.Action;
 import manager.buttonChoices.Source;
 import manager.download.Downloader;
 import manager.listeners.DownloadCompleteListener;
+import manager.listeners.ListForPrintChangeListener;
 import manager.listeners.ParseCompleteListener;
-import manager.listeners.SearchCompleteListener;
-import manager.listeners.SortCompleteListener;
 import manager.parse.AbstractParser;
-import manager.parse.JsonParser;
-import manager.parse.XmlParser;
+import manager.parse.AbstractParserFactory;
+import manager.parse.JsonParserFactory;
+import manager.parse.XmlParserFactory;
 import manager.search.Searcher;
 import manager.sort.Sorter;
+import model.Model;
+import model.entity.Stock;
+import model.entity.StockExchange;
 import ui.Ui;
 
 import java.io.File;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-public class Manager implements DownloadCompleteListener, ParseCompleteListener, SortCompleteListener, SearchCompleteListener {
-    private File file;
-    private StockExchange stockExchange;
+
+public class Manager implements DownloadCompleteListener, ParseCompleteListener, ListForPrintChangeListener {
+    private static final String JSON_LINK = "http://kiparo.ru/t/stock.json";
+    private static final String XML_LINK = "http://kiparo.ru/t/stock.xml";
+    //под паттерн подходят строки, заканчивающиеся на .xml
+    private static final String FILE_TYPE_XML = "^.+\\.xml$";
     private Ui ui;
-    private List<Stock> stocksToDisplay;
-    public static final String JSON_LINK = "http://kiparo.ru/t/stock.json";
-    public static final String XML_LINK = "http://kiparo.ru/t/stock.xml";
+    private final Model model;
+    //ленивая инициализация тут не нужна, т.к. менеджер будет инициализирован в любом случае
+    private static final Manager MANAGER = new Manager();
 
-    public Manager(Ui ui) {
+    private Manager() {
+        model = new Model();
+    }
+
+    //инициализация в конструкторе невозможна, т.к. используется singleton
+    public void setUi(Ui ui) {
         this.ui = ui;
     }
 
+    public static Manager getInstance() {
+        return MANAGER;
+    }
+
+    /*
+    устанавливает ссылку для загрузки и имя файла в соответствии с выбором пользователя
+    создает загрузчик и запускает на его основе новый поток
+     */
     public void getFile(Source source) {
         String link;
         String fileName;
@@ -41,94 +60,120 @@ public class Manager implements DownloadCompleteListener, ParseCompleteListener,
             link = XML_LINK;
             fileName = "src/content.xml";
         }
-        Downloader downloader = new Downloader(link, fileName, this);
+        Downloader downloader = new Downloader(link, fileName, this, model);
         Thread downloadThread = new Thread(downloader, "download thread");
         downloadThread.start();
     }
 
-    public void parse() {
-        AbstractParser parser;
-        if (file.getName().toLowerCase().endsWith("xml")) {
-            parser = new XmlParser(this, file);
-        } else {
-            parser = new JsonParser(this, file);
+    //в случае успешной загрузки инициализирует поле модели и начинает парсинг
+    @Override
+    public void onDownloadSuccess(File file) {
+        synchronized (model) {
+            model.setFile(file);
+            parse();
         }
+    }
+
+    //отсылает на печать сообщение об ощибке
+    @Override
+    public void onDownloadFailed(String message) {
+        ui.print(message);
+    }
+
+    /*
+    инициализирует переменную абстрактной фабрики конкретной реализацией в
+    соответствии с выбором пользователя, далее получает нужный парсер
+    и запускает на его основе новый поток
+     */
+    private void parse() {
+        AbstractParser parser;
+        AbstractParserFactory factory;
+        Pattern pattern = Pattern.compile(FILE_TYPE_XML);
+        Matcher matcher = pattern.matcher(model.getFile().getName());
+        if (matcher.matches()) {
+            factory = new XmlParserFactory(this, model);
+        } else {
+            factory = new JsonParserFactory(this, model);
+        }
+        parser = factory.getParser();
         Thread parseThread = new Thread(parser);
         parseThread.start();
     }
 
+    /*
+    инициализирует поля модели объектами, созданными при парсинге, выводит
+    информацию на печать в ui и оповещает другие потоки, которые, возможно ожидают данные
+     */
     @Override
     public void onParseSuccess(StockExchange stockExchange) {
-        this.stockExchange = stockExchange;
-        stocksToDisplay = stockExchange.getStock();
-        showAll();
-        synchronized (this) {
-            this.notifyAll();
+        synchronized (model) {
+            model.setStockExchange(stockExchange);
+            model.setStocksToDisplay(stockExchange.getStock());
+            showAll();
+            model.notifyAll();
         }
     }
 
+    //выводит в ui информацию об ощибке
     @Override
-    public void onParseFailed() {
-        ui.print("Parse failed");
+    public void onParseFailed(String message) {
+        ui.print(message);
     }
 
-    @Override
-    public void onDownloadSuccess(File file) {
-        this.file = file;
-        parse();
-    }
-
-    @Override
-    public void onDownloadFailed(String message) {
-        ui.print("Failed");
-    }
-
+    /*
+    запускает сортировку в новом потоке на основе объекта sorter, учитывая
+    выбор пользователем критерия сортировки
+    */
     public void sort(Action action) {
-        synchronized (this) {
-            if (stockExchange == null) {
-                try {
-                    wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        Thread sortThread = new Thread(new Sorter(this, stocksToDisplay, action));
+        Thread sortThread = new Thread(new Sorter(this, model, action));
         sortThread.start();
     }
 
+    /*
+    запускает поиск в новом потоке на основе объекта searcher, в случае, если ключ не нулевой длинны
+    */
     public void search(String key) {
         if (key != null && !key.equals("")) {
-            Thread searchThread = new Thread(new Searcher(this, key, stocksToDisplay));
+            Thread searchThread = new Thread(new Searcher(this, key, model));
             searchThread.start();
         }
     }
-
+//принимает измененный список акций для отображения и отправляет его на печать
     @Override
-    public void onSortSuccess(List<Stock> stocks) {
-        stocksToDisplay = stocks;
-        ui.print(stocksToDisplay);
+    public void onListForPrintChanged(List<Stock> stocks) {
+        showCurrentList(stocks);
     }
 
-    @Override
-    public void onSearchSuccess(List<Stock> stocks) {
-        stocksToDisplay = stocks;
-        ui.print(stocks);
-    }
-
-    public void showAll() {
-        if (stockExchange != null) {
-            stocksToDisplay = stockExchange.getStock();
-            ui.print(stockExchange);
+    private void showCurrentList(List<Stock> stocks) {
+        synchronized (model) {
+            model.setStocksToDisplay(stocks);
+            ui.print(model.toString());
         }
     }
 
+    /*
+    добавляет в список для отображения все доступные акции и выводит информацию на печать
+     */
+    public void showAll() {
+        synchronized (model) {
+            while (model.getStockExchange() == null) {
+                try {
+                    model.wait();
+                } catch (InterruptedException ignored) {
+                }
+            }
+            model.setStocksToDisplay(model.getStockExchange().getStock());
+            ui.print(model.toString());
+        }
+    }
+
+    //обнуляет данные модели
     public void resetAll() {
-        synchronized (this) {
-            file.delete();
-            file = null;
-            stockExchange = null;
-            stocksToDisplay = null;
+        synchronized (model) {
+            model.getFile().delete();
+            model.setFile(null);
+            model.setStockExchange(null);
+            model.setStocksToDisplay(null);
         }
     }
 }
