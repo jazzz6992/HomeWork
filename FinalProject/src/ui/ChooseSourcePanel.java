@@ -7,7 +7,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class ChooseSourcePanel implements CurrentPanel {
-    private ChooseSourceListener listener;
     private JPanel mainPanel;
     private JPanel buttonPanel;
     private JButton jsonButton;
@@ -15,8 +14,8 @@ public class ChooseSourcePanel implements CurrentPanel {
     private JTextArea text;
 
     //в конструкторе устанавливаем слушателя для кнопок и задаем желаемое поведение при нажатии
-    public ChooseSourcePanel(ChooseSourceListener listener) {
-        this.listener = listener;
+    ChooseSourcePanel(ChooseSourceListener listener) {
+        ChooseSourceListener listener1 = listener;
         text.setText("Выберите источник данных:");
         jsonButton.addActionListener(new ActionListener() {
             @Override

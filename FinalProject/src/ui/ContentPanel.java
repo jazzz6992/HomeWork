@@ -18,11 +18,9 @@ public class ContentPanel implements CurrentPanel {
     private JButton sortByName;
     private JButton backToSource;
     private JScrollPane scrollPane;
-    private ChooseActionListener listener;
 
     //в конструкторе устанавливаем слушателя для кнопок и задаем желаемое поведение при нажатии
-    public ContentPanel(ChooseActionListener listener) {
-        this.listener = listener;
+    ContentPanel(ChooseActionListener listener) {
         sortByPriceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {

@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateGsonConverter implements JsonDeserializer<Date> {
-    public static final String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss X";
+    private static final String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss X";
 
     //устанавливает необходимое поведение для парсинга даты
     @Override

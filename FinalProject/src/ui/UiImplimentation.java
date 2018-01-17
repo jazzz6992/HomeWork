@@ -22,11 +22,11 @@ public class UiImplimentation extends JFrame implements Ui, ChooseSourceListener
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
-    public CurrentPanel getCurrentPanel() {
+    private CurrentPanel getCurrentPanel() {
         return currentPanel;
     }
 
-    public void setCurrentPanel(CurrentPanel currentPanel) {
+    private void setCurrentPanel(CurrentPanel currentPanel) {
         this.currentPanel = currentPanel;
     }
 

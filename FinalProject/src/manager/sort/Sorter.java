@@ -53,7 +53,7 @@ public class Sorter implements Runnable {
             while (model.getStocksToDisplay() == null) {
                 try {
                     model.wait();
-                } catch (InterruptedException e) {
+                } catch (InterruptedException ignored) {
                 }
             }
             List<Stock> stocks = new ArrayList<>(model.getStocksToDisplay());

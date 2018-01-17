@@ -13,7 +13,7 @@ import java.util.Date;
 
 public class JsonParser extends AbstractParser {
 
-    public JsonParser(ParseCompleteListener listener, Model model) {
+    JsonParser(ParseCompleteListener listener, Model model) {
         super(listener, model);
     }
 

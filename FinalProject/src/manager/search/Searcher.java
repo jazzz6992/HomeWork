@@ -13,7 +13,6 @@ public class Searcher implements Runnable {
 
     private ListForPrintChangeListener listener;
     private Pattern pattern;
-    private Matcher matcher;
     private final Model model;
 
     public Searcher(ListForPrintChangeListener listener, String key, Model model) {
@@ -34,11 +33,12 @@ public class Searcher implements Runnable {
             while (model.getStocksToDisplay() == null) {
                 try {
                     model.wait();
-                } catch (InterruptedException e) {
+                } catch (InterruptedException ignored) {
                 }
             }
             List<Stock> stocks = model.getStocksToDisplay();
             List<Stock> result = new ArrayList<>();
+            Matcher matcher;
             for (Stock s :
                     stocks) {
                 matcher = pattern.matcher(s.getName().toLowerCase());

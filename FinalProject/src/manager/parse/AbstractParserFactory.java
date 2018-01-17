@@ -10,7 +10,7 @@ public abstract class AbstractParserFactory {
     private ParseCompleteListener listener;
     private Model model;
 
-    public AbstractParserFactory(ParseCompleteListener listener, Model model) {
+    AbstractParserFactory(ParseCompleteListener listener, Model model) {
         this.listener = listener;
         this.model = model;
     }

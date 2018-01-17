@@ -13,7 +13,7 @@ public abstract class AbstractParser implements Runnable {
     private ParseCompleteListener listener;
     private final Model model;
 
-    public AbstractParser(ParseCompleteListener listener, Model model) {
+    AbstractParser(ParseCompleteListener listener, Model model) {
         this.listener = listener;
         this.model = model;
     }

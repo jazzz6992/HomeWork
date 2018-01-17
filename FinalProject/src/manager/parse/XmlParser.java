@@ -20,9 +20,9 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class XmlParser extends AbstractParser {
-    public static final String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss X";
+    private static final String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss X";
 
-    public XmlParser(ParseCompleteListener listener, Model model) {
+    XmlParser(ParseCompleteListener listener, Model model) {
         super(listener, model);
     }
 
