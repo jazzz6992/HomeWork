@@ -34,7 +34,6 @@ public class DownloadThread extends Thread {
         synchronized (receiver) {
             file = downloadFile("http://kiparo.ru/t/stock.xml");
             receiver.setFileReadyForProcess(file, XML_READY);
-            receiver.setParsingInProgress(true);
             receiver.notifyAll();
         }
         synchronized (receiver) {
@@ -49,7 +48,6 @@ public class DownloadThread extends Thread {
         synchronized (receiver) {
             file = downloadFile("http://kiparo.ru/t/stock.json");
             receiver.setFileReadyForProcess(file, JSON_READY);
-            receiver.setParsingInProgress(true);
             receiver.notifyAll();
         }
     }

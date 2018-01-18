@@ -71,6 +71,7 @@ public class ParsingThread extends Thread {
             xmlReady = false;
             jsonReady = true;
         }
+        parsingInProgress = true;
     }
 
     private StockMarket parse() {
