@@ -17,8 +17,8 @@ public class Searcher implements Runnable {
 
     public Searcher(ListForPrintChangeListener listener, String key, Model model) {
         this.listener = listener;
-        //для поиска создается паттерн, содержащий ключ с любым предшествующим и последующим кол-вом символов
-        pattern = Pattern.compile("^.*" + key + ".*$");
+        //для поиска создается паттерн, содержащий ключ (не зависимо от регистра) с любым предшествующим и последующим кол-вом символов
+        pattern = Pattern.compile("^.*" + key.toLowerCase() + ".*$");
         this.model = model;
     }
 

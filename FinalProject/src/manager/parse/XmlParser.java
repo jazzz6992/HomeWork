@@ -22,19 +22,19 @@ import java.util.Date;
 public class XmlParser extends AbstractParser {
     private static final String DATE_FORMAT = "yyyy-MM-dd hh:mm:ss X";
 
-    XmlParser(ParseCompleteListener listener, Model model) {
-        super(listener, model);
+    XmlParser(Model model, ParseCompleteListener listener) {
+        super(model, listener);
     }
 
     //парсит данные из файла и оповещает слушателя в случае успеха или неудачи
     @Override
-    public void parse(File sourse) {
+    public void parse(File source) {
         StockExchange stockExchange = new StockExchange();
         Document dom;
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
-            dom = builder.parse(sourse);
+            dom = builder.parse(source);
             Element rootElement = dom.getDocumentElement();
             NodeList curNodeList = rootElement.getElementsByTagName("name");
             String name = curNodeList.item(0).getTextContent();

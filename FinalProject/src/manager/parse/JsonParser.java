@@ -13,19 +13,19 @@ import java.util.Date;
 
 public class JsonParser extends AbstractParser {
 
-    JsonParser(ParseCompleteListener listener, Model model) {
-        super(listener, model);
+    JsonParser(Model model, ParseCompleteListener listener) {
+        super(model, listener);
     }
 
-    //парсит данные из файла и оповещает слушателя в случае успеха или неудачи
+    //парсит данные из файла и оповещает слушателя о результате
     @Override
-    public void parse(File sourse) {
+    public void parse(File source) {
         StockExchange stockExchange;
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Date.class, new DateGsonConverter());
         Gson gson = builder.create();
         try {
-            stockExchange = gson.fromJson(new FileReader(sourse), StockExchange.class);
+            stockExchange = gson.fromJson(new FileReader(source), StockExchange.class);
             getListener().onParseSuccess(stockExchange);
         } catch (FileNotFoundException e) {
             getListener().onParseFailed(e.getMessage());

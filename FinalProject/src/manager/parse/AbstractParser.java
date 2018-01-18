@@ -10,28 +10,24 @@ public abstract class AbstractParser implements Runnable {
     в соответствии с полиморфизмом все данные и методы парсера определены в
     абстрактном классе. сам метод parse реализован в конкретных парсерах
      */
-    private ParseCompleteListener listener;
     private final Model model;
+    private ParseCompleteListener listener;
 
-    AbstractParser(ParseCompleteListener listener, Model model) {
-        this.listener = listener;
+    AbstractParser(Model model, ParseCompleteListener listener) {
         this.model = model;
+        this.listener = listener;
     }
 
-    abstract void parse(File sourse);
-
-    public ParseCompleteListener getListener() {
-        return listener;
-    }
-
-    public Model getModel() {
-        return model;
-    }
+    abstract void parse(File source);
 
     @Override
     public void run() {
         synchronized (model) {
             parse(model.getFile());
         }
+    }
+
+    public ParseCompleteListener getListener() {
+        return listener;
     }
 }

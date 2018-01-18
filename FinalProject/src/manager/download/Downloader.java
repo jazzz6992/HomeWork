@@ -62,7 +62,7 @@ public class Downloader implements Runnable {
                     return null;
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                listener.onDownloadFailed(e.getMessage());
                 return null;
             }
         }

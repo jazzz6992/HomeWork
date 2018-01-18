@@ -3,6 +3,7 @@ package manager;
 import manager.buttonChoices.Action;
 import manager.buttonChoices.Source;
 import manager.download.Downloader;
+import manager.listeners.DataChangedListener;
 import manager.listeners.DownloadCompleteListener;
 import manager.listeners.ListForPrintChangeListener;
 import manager.listeners.ParseCompleteListener;
@@ -23,7 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public class Manager implements DownloadCompleteListener, ParseCompleteListener, ListForPrintChangeListener {
+public class Manager implements DownloadCompleteListener, ListForPrintChangeListener, ParseCompleteListener, DataChangedListener {
     private static final String JSON_LINK = "http://kiparo.ru/t/stock.json";
     private static final String XML_LINK = "http://kiparo.ru/t/stock.xml";
     //под паттерн подходят строки, заканчивающиеся на .xml
@@ -34,7 +35,7 @@ public class Manager implements DownloadCompleteListener, ParseCompleteListener,
     private static final Manager MANAGER = new Manager();
 
     private Manager() {
-        model = new Model();
+        model = new Model(this);
     }
 
     //инициализация в конструкторе невозможна, т.к. используется singleton
@@ -91,33 +92,13 @@ public class Manager implements DownloadCompleteListener, ParseCompleteListener,
         Pattern pattern = Pattern.compile(FILE_TYPE_XML);
         Matcher matcher = pattern.matcher(model.getFile().getName());
         if (matcher.matches()) {
-            factory = new XmlParserFactory(this, model);
+            factory = new XmlParserFactory(model, this);
         } else {
-            factory = new JsonParserFactory(this, model);
+            factory = new JsonParserFactory(model, this);
         }
         parser = factory.getParser();
         Thread parseThread = new Thread(parser);
         parseThread.start();
-    }
-
-    /*
-    инициализирует поля модели объектами, созданными при парсинге, выводит
-    информацию на печать в ui и оповещает другие потоки, которые, возможно ожидают данные
-     */
-    @Override
-    public void onParseSuccess(StockExchange stockExchange) {
-        synchronized (model) {
-            model.setStockExchange(stockExchange);
-            model.setStocksToDisplay(stockExchange.getStock());
-            showAll();
-            model.notifyAll();
-        }
-    }
-
-    //выводит в ui информацию об ощибке
-    @Override
-    public void onParseFailed(String message) {
-        ui.print(message);
     }
 
     /*
@@ -138,7 +119,8 @@ public class Manager implements DownloadCompleteListener, ParseCompleteListener,
             searchThread.start();
         }
     }
-//принимает измененный список акций для отображения и отправляет его на печать
+
+    //принимает измененный список акций для отображения и обновляет модель
     @Override
     public void onListForPrintChanged(List<Stock> stocks) {
         showCurrentList(stocks);
@@ -147,12 +129,11 @@ public class Manager implements DownloadCompleteListener, ParseCompleteListener,
     private void showCurrentList(List<Stock> stocks) {
         synchronized (model) {
             model.setStocksToDisplay(stocks);
-            ui.print(model.toString());
         }
     }
 
     /*
-    добавляет в список для отображения все доступные акции и выводит информацию на печать
+    добавляет в список для отображения все доступные акции
      */
     public void showAll() {
         synchronized (model) {
@@ -163,7 +144,6 @@ public class Manager implements DownloadCompleteListener, ParseCompleteListener,
                 }
             }
             model.setStocksToDisplay(model.getStockExchange().getStock());
-            ui.print(model.toString());
         }
     }
 
@@ -175,5 +155,22 @@ public class Manager implements DownloadCompleteListener, ParseCompleteListener,
             model.setStockExchange(null);
             model.setStocksToDisplay(null);
         }
+    }
+
+    //при оповещении о изменениях в модели отправляет ее на печать в ui
+    @Override
+    public void onDataChanged() {
+        ui.print(model.toString());
+    }
+
+
+    @Override
+    public void onParseSuccess(StockExchange stockExchange) {
+        model.setStockExchange(stockExchange);
+    }
+
+    @Override
+    public void onParseFailed(String message) {
+        ui.print(message);
     }
 }

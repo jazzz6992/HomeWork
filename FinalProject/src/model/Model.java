@@ -1,5 +1,6 @@
 package model;
 
+import manager.listeners.DataChangedListener;
 import model.entity.Stock;
 import model.entity.StockExchange;
 
@@ -13,6 +14,11 @@ public class Model {
     private StockExchange stockExchange;
     //список акций для показа на текущий момент
     private List<Stock> stocksToDisplay;
+    private DataChangedListener listener;
+
+    public Model(DataChangedListener listener) {
+        this.listener = listener;
+    }
 
     public File getFile() {
         return file;
@@ -26,16 +32,27 @@ public class Model {
         return stockExchange;
     }
 
-    public void setStockExchange(StockExchange stockExchange) {
+    //устанавливает данные модели и оповещает потоки, которые, возможно, одидают эти данные
+    public synchronized void setStockExchange(StockExchange stockExchange) {
         this.stockExchange = stockExchange;
+        if (stockExchange != null) {
+            setStocksToDisplay(stockExchange.getStock());
+        }
+        notifyAll();
     }
 
     public List<Stock> getStocksToDisplay() {
         return stocksToDisplay;
+
     }
 
+    //устанавливает данные модели и оповещает об этом слушателя
     public void setStocksToDisplay(List<Stock> stocksToDisplay) {
         this.stocksToDisplay = stocksToDisplay;
+        if (stocksToDisplay != null) {
+            listener.onDataChanged();
+        }
+
     }
 
     /*

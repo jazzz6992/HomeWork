@@ -5,12 +5,12 @@ import model.Model;
 
 //реализация фабрики для получения json парсера
 public class JsonParserFactory extends AbstractParserFactory {
-    public JsonParserFactory(ParseCompleteListener listener, Model model) {
-        super(listener, model);
+    public JsonParserFactory(Model model, ParseCompleteListener listener) {
+        super(model, listener);
     }
 
     @Override
     public AbstractParser getParser() {
-        return new JsonParser(getListener(), getModel());
+        return new JsonParser(getModel(), getListener());
     }
 }
