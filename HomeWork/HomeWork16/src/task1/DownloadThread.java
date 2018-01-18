@@ -12,30 +12,45 @@ import java.net.URL;
 public class DownloadThread extends Thread {
     private File file;
     //ответ на вопрос из третьего задания, о том, почему wait и notify объявлены в Object
-    private FileReciever reciever;
+    private final ParsingThread receiver;
+    public static final String XML_READY = "xml";
+    public static final String JSON_READY = "json";
 
-    public DownloadThread(FileReciever reciever) {
-        this.reciever = reciever;
+    public DownloadThread(ParsingThread receiver) {
+        this.receiver = receiver;
     }
 
     @Override
     public void run() {
-        file = downloadFile("http://kiparo.ru/t/stock.xml");
-        reciever.setFileReadyForProcess(file);
-        synchronized (reciever) {
-            reciever.notifyAll();
-        }
-        try {
-            synchronized (reciever) {
-                reciever.wait();
+        synchronized (receiver) {
+            while (receiver.isParsingInProgress()) {
+                try {
+                    receiver.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
-        file = downloadFile("http://kiparo.ru/t/stock.json");
-        reciever.setFileReadyForProcess(file);
-        synchronized (reciever) {
-            reciever.notifyAll();
+        synchronized (receiver) {
+            file = downloadFile("http://kiparo.ru/t/stock.xml");
+            receiver.setFileReadyForProcess(file, XML_READY);
+            receiver.setParsingInProgress(true);
+            receiver.notifyAll();
+        }
+        synchronized (receiver) {
+            while (receiver.isParsingInProgress()) {
+                try {
+                    receiver.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        synchronized (receiver) {
+            file = downloadFile("http://kiparo.ru/t/stock.json");
+            receiver.setFileReadyForProcess(file, JSON_READY);
+            receiver.setParsingInProgress(true);
+            receiver.notifyAll();
         }
     }
 

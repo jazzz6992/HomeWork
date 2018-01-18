@@ -1,7 +1,5 @@
 package task1;
 
-import task1.entity.Stock;
-import task1.entity.StockMarket;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -10,6 +8,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import task1.entity.Stock;
+import task1.entity.StockMarket;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,41 +24,73 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class ParsingThread extends Thread implements FileReciever {
+public class ParsingThread extends Thread {
 
 
     private File file;
+    private boolean xmlReady = false;
+    private boolean jsonReady = false;
+    private boolean parsingInProgress = false;
 
     @Override
     public void run() {
-        for (int i = 0; i < 2; i++) {
-            try {
-                synchronized (this) {
-                    wait();
-                }
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            System.out.println(parse());
+        try {
             synchronized (this) {
-                this.notifyAll();
+                while (!xmlReady) {
+                    this.wait();
+                }
             }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(parse());
+        synchronized (this) {
+            this.notifyAll();
+        }
+        try {
+            synchronized (this) {
+                while (!jsonReady) {
+                    this.wait();
+                }
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(parse());
+        synchronized (this) {
+            this.notifyAll();
         }
     }
 
-    @Override
-    public void setFileReadyForProcess(File file) {
+    public void setFileReadyForProcess(File file, String type) {
         this.file = file;
+        if (type.equals(DownloadThread.XML_READY)) {
+            xmlReady = true;
+            jsonReady = false;
+        } else if (type.equals(DownloadThread.JSON_READY)) {
+            xmlReady = false;
+            jsonReady = true;
+        }
     }
 
     private StockMarket parse() {
         String type = file.getName().substring(file.getName().lastIndexOf(".") + 1);
+        StockMarket market = null;
         if (type.equals("xml")) {
-            return parseXML();
+            market = parseXML();
         } else if (type.equals("json")) {
-            return parseJson();
+            market = parseJson();
         }
-        return null;
+        parsingInProgress = false;
+        return market;
+    }
+
+    public boolean isParsingInProgress() {
+        return parsingInProgress;
+    }
+
+    public void setParsingInProgress(boolean parsingInProgress) {
+        this.parsingInProgress = parsingInProgress;
     }
 
     private StockMarket parseJson() {
