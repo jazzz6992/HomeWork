@@ -76,9 +76,9 @@ public class ParsingThread extends Thread {
     private StockMarket parse() {
         String type = file.getName().substring(file.getName().lastIndexOf(".") + 1);
         StockMarket market = null;
-        if (type.equals("xml")) {
+        if (type.equals(DownloadThread.XML_READY)) {
             market = parseXML();
-        } else if (type.equals("json")) {
+        } else if (type.equals(DownloadThread.JSON_READY)) {
             market = parseJson();
         }
         parsingInProgress = false;
