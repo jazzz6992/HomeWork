@@ -27,6 +27,8 @@ import java.util.regex.Pattern;
 public class Manager implements DownloadCompleteListener, ListForPrintChangeListener, ParseCompleteListener, DataChangedListener {
     private static final String JSON_LINK = "http://kiparo.ru/t/stock.json";
     private static final String XML_LINK = "http://kiparo.ru/t/stock.xml";
+    private static final String JSON_FILE = "src/content.json";
+    private static final String XML_FILE = "src/content.xml";
     //под паттерн подходят строки, заканчивающиеся на .xml
     private static final String FILE_TYPE_XML = "^.+\\.xml$";
     private Ui ui;
@@ -56,10 +58,10 @@ public class Manager implements DownloadCompleteListener, ListForPrintChangeList
         String fileName;
         if (source == Source.JSON) {
             link = JSON_LINK;
-            fileName = "src/content.json";
+            fileName = JSON_FILE;
         } else {
             link = XML_LINK;
-            fileName = "src/content.xml";
+            fileName = XML_FILE;
         }
         Downloader downloader = new Downloader(link, fileName, this, model);
         Thread downloadThread = new Thread(downloader, "download thread");
