@@ -21,7 +21,7 @@ public class ContentPanel implements CurrentPanel {
     private JButton backToSource;
     private JScrollPane scrollPane;
     private JButton showAveragePriceButton;
-    private final static String SEARCH_HINT = "Search...";
+    public final static String SEARCH_HINT = "Search...";
 
     //в конструкторе устанавливаем слушателя для кнопок и задаем желаемое поведение при нажатии
     ContentPanel(ChooseActionListener listener) {
