@@ -65,6 +65,8 @@ public class UiImplimentation extends JFrame implements Ui, ChooseSourceListener
             currentPanel = new ChooseSourcePanel(this);
             setContentPane(currentPanel.getMainPanel());
             pack();
+        } else if (action == Action.AVERAGE) {
+            manager.average();
         }
     }
 }

@@ -15,9 +15,10 @@ public class ContentPanel implements CurrentPanel {
     private JTextField searchField;
     private JTextArea contentArea;
     private JButton showAllButton;
-    private JButton sortByName;
+    private JButton sortByNameButton;
     private JButton backToSource;
     private JScrollPane scrollPane;
+    private JButton showAveragePriceButton;
 
     //в конструкторе устанавливаем слушателя для кнопок и задаем желаемое поведение при нажатии
     ContentPanel(ChooseActionListener listener) {
@@ -39,7 +40,13 @@ public class ContentPanel implements CurrentPanel {
                 listener.onChooseActionMade(Action.SHOW_ALL);
             }
         });
-        sortByName.addActionListener(new ActionListener() {
+        showAveragePriceButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                listener.onChooseActionMade(Action.AVERAGE);
+            }
+        });
+        sortByNameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 listener.onChooseActionMade(Action.SORT_BY_NAME);

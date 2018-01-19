@@ -50,9 +50,12 @@ public class Model {
     public void setStocksToDisplay(List<Stock> stocksToDisplay) {
         this.stocksToDisplay = stocksToDisplay;
         if (stocksToDisplay != null) {
-            listener.onDataChanged();
+            notifyListener();
         }
+    }
 
+    private void notifyListener() {
+        listener.update();
     }
 
     /*

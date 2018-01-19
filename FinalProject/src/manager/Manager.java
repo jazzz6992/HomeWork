@@ -161,7 +161,7 @@ public class Manager implements DownloadCompleteListener, ListForPrintChangeList
 
     //при оповещении о изменениях в модели отправляет ее на печать в ui
     @Override
-    public void onDataChanged() {
+    public void update() {
         ui.print(model.toString());
     }
 
@@ -174,5 +174,20 @@ public class Manager implements DownloadCompleteListener, ListForPrintChangeList
     @Override
     public void onParseFailed(String message) {
         ui.print(message);
+    }
+
+    public void average() {
+        double average = 0;
+        for (Stock s :
+                model.getStocksToDisplay()) {
+            average += s.getBid();
+        }
+        average /= model.getStocksToDisplay().size();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(model.toString())
+                .append("\n")
+                .append("Average price for selected stocks is ")
+                .append(String.format("%.3f", average));
+        ui.print(stringBuilder.toString());
     }
 }
