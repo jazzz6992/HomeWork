@@ -6,5 +6,5 @@ import java.util.List;
 
 //интерфейс для отслеживания изменений в списке акций для отображения
 public interface ListForPrintChangeListener {
-    void onListForPrintChanged(List<Stock> stocks);
+    void updateListForPrint(List<Stock> stocks);
 }

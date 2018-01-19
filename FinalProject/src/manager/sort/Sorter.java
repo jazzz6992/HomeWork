@@ -1,6 +1,6 @@
 package manager.sort;
 
-import manager.buttonChoices.Action;
+import ui.buttonChoices.Action;
 import manager.listeners.ListForPrintChangeListener;
 import model.Model;
 import model.entity.Stock;
@@ -58,7 +58,7 @@ public class Sorter implements Runnable {
             }
             List<Stock> stocks = new ArrayList<>(model.getStocksToDisplay());
             stocks.sort(comparator);
-            listener.onListForPrintChanged(stocks);
+            listener.updateListForPrint(stocks);
         }
     }
 }

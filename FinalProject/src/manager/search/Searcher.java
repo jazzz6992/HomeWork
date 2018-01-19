@@ -46,7 +46,7 @@ public class Searcher implements Runnable {
                     result.add(s);
                 }
             }
-            listener.onListForPrintChanged(result);
+            listener.updateListForPrint(result);
         }
     }
 }

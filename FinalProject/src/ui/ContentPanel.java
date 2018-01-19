@@ -1,6 +1,6 @@
 package ui;
 
-import manager.buttonChoices.Action;
+import ui.buttonChoices.Action;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -21,11 +21,12 @@ public class ContentPanel implements CurrentPanel {
     private JButton backToSource;
     private JScrollPane scrollPane;
     private JButton showAveragePriceButton;
+    private final static String SEARCH_HINT = "Search...";
 
     //в конструкторе устанавливаем слушателя для кнопок и задаем желаемое поведение при нажатии
     ContentPanel(ChooseActionListener listener) {
-        searchField.setToolTipText("Search...");
-        searchField.setText("Search...");
+        searchField.setToolTipText(SEARCH_HINT);
+        searchField.setText(SEARCH_HINT);
         sortByPriceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -65,7 +66,7 @@ public class ContentPanel implements CurrentPanel {
         searchField.addFocusListener(new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
-                if (searchField.getText().equals("Search...")) {
+                if (searchField.getText().equals(SEARCH_HINT)) {
                     searchField.setText("");
                 }
             }
@@ -73,7 +74,7 @@ public class ContentPanel implements CurrentPanel {
             @Override
             public void focusLost(FocusEvent e) {
                 if (searchField.getText().equals("")) {
-                    searchField.setText("Search...");
+                    searchField.setText(SEARCH_HINT);
                 }
             }
         });

@@ -1,6 +1,6 @@
 package ui;
 
-import manager.buttonChoices.Source;
+import ui.buttonChoices.Source;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

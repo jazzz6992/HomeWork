@@ -1,8 +1,8 @@
 package ui;
 
 import manager.Manager;
-import manager.buttonChoices.Action;
-import manager.buttonChoices.Source;
+import ui.buttonChoices.Action;
+import ui.buttonChoices.Source;
 
 import javax.swing.*;
 

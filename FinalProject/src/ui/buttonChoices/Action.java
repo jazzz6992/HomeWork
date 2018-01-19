@@ -1,4 +1,4 @@
-package manager.buttonChoices;
+package ui.buttonChoices;
 
 public enum Action {
     //список возможных действий из панели контента

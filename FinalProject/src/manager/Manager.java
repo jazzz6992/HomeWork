@@ -1,7 +1,7 @@
 package manager;
 
-import manager.buttonChoices.Action;
-import manager.buttonChoices.Source;
+import ui.buttonChoices.Action;
+import ui.buttonChoices.Source;
 import manager.download.Downloader;
 import manager.listeners.DataChangedListener;
 import manager.listeners.DownloadCompleteListener;
@@ -124,7 +124,7 @@ public class Manager implements DownloadCompleteListener, ListForPrintChangeList
 
     //принимает измененный список акций для отображения и обновляет модель
     @Override
-    public void onListForPrintChanged(List<Stock> stocks) {
+    public void updateListForPrint(List<Stock> stocks) {
         showCurrentList(stocks);
     }
 
