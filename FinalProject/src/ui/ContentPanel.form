@@ -57,7 +57,9 @@
         <children>
           <component id="c599" class="javax.swing.JTextField" binding="searchField">
             <constraints border-constraint="South"/>
-            <properties/>
+            <properties>
+              <toolTipText value=""/>
+            </properties>
           </component>
           <scrollpane id="e80da" binding="scrollPane">
             <constraints border-constraint="Center"/>

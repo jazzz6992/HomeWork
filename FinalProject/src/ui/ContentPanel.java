@@ -5,6 +5,8 @@ import manager.buttonChoices.Action;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class ContentPanel implements CurrentPanel {
     private JPanel mainPanel;
@@ -22,6 +24,8 @@ public class ContentPanel implements CurrentPanel {
 
     //в конструкторе устанавливаем слушателя для кнопок и задаем желаемое поведение при нажатии
     ContentPanel(ChooseActionListener listener) {
+        searchField.setToolTipText("Search...");
+        searchField.setText("Search...");
         sortByPriceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -56,6 +60,21 @@ public class ContentPanel implements CurrentPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 listener.onChooseActionMade(Action.BACK);
+            }
+        });
+        searchField.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (searchField.getText().equals("Search...")) {
+                    searchField.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (searchField.getText().equals("")) {
+                    searchField.setText("Search...");
+                }
             }
         });
     }
