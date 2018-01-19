@@ -54,8 +54,7 @@ public class UiImplimentation extends JFrame implements Ui, ChooseSourceListener
         if (action == Action.SEARCH) {
             JTextField searchField = ((ContentPanel) currentPanel).getSearchField();
             String key = searchField.getText();
-            searchField.setText(ContentPanel.SEARCH_HINT);
-            if (!key.equals("") && !key.equals(ContentPanel.SEARCH_HINT)) {
+            if (!key.equals(ContentPanel.SEARCH_HINT)) {
                 manager.search(key);
             }
         } else if (action.name().toLowerCase().contains("sort")) {

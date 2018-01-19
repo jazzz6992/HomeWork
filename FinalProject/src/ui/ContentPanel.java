@@ -37,6 +37,7 @@ public class ContentPanel implements CurrentPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 listener.onChooseActionMade(Action.SEARCH);
+                searchField.setText(SEARCH_HINT);
             }
         });
         showAllButton.addActionListener(new ActionListener() {

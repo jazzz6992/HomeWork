@@ -1,27 +1,23 @@
 package manager;
 
-import ui.buttonChoices.Action;
-import ui.buttonChoices.Source;
 import manager.download.Downloader;
 import manager.listeners.DataChangedListener;
 import manager.listeners.DownloadCompleteListener;
 import manager.listeners.ListForPrintChangeListener;
 import manager.listeners.ParseCompleteListener;
 import manager.parse.AbstractParser;
-import manager.parse.AbstractParserFactory;
-import manager.parse.JsonParserFactory;
-import manager.parse.XmlParserFactory;
+import manager.parse.SimpleParserFactory;
 import manager.search.Searcher;
 import manager.sort.Sorter;
 import model.Model;
 import model.entity.Stock;
 import model.entity.StockExchange;
 import ui.Ui;
+import ui.buttonChoices.Action;
+import ui.buttonChoices.Source;
 
 import java.io.File;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 
 public class Manager implements DownloadCompleteListener, ListForPrintChangeListener, ParseCompleteListener, DataChangedListener {
@@ -29,8 +25,6 @@ public class Manager implements DownloadCompleteListener, ListForPrintChangeList
     private static final String XML_LINK = "http://kiparo.ru/t/stock.xml";
     private static final String JSON_FILE = "src/content.json";
     private static final String XML_FILE = "src/content.xml";
-    //под паттерн подходят строки, заканчивающиеся на .xml
-    private static final String FILE_TYPE_XML = "^.+\\.xml$";
     private Ui ui;
     private final Model model;
     //ленивая инициализация тут не нужна, т.к. менеджер будет инициализирован в любом случае
@@ -84,21 +78,12 @@ public class Manager implements DownloadCompleteListener, ListForPrintChangeList
     }
 
     /*
-    инициализирует переменную абстрактной фабрики конкретной реализацией в
-    соответствии с выбором пользователя, далее получает нужный парсер
-    и запускает на его основе новый поток
+    инициализирует переменную абстрактного парсера конкретной реализацией в зависимости от состояния модели
+    и запускает поток на основе созданного парсера
      */
     private void parse() {
         AbstractParser parser;
-        AbstractParserFactory factory;
-        Pattern pattern = Pattern.compile(FILE_TYPE_XML);
-        Matcher matcher = pattern.matcher(model.getFile().getName());
-        if (matcher.matches()) {
-            factory = new XmlParserFactory(model, this);
-        } else {
-            factory = new JsonParserFactory(model, this);
-        }
-        parser = factory.getParser();
+        parser = SimpleParserFactory.createParser(model, this);
         Thread parseThread = new Thread(parser);
         parseThread.start();
     }
