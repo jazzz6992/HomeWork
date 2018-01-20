@@ -44,7 +44,7 @@ public class Downloader implements Runnable {
                     listener.onDownloadFailed("Response code is " + connection.getResponseCode());
                 }
             } catch (IOException e) {
-                listener.onDownloadFailed(e.getMessage());
+                listener.onDownloadFailed("Address " + e.getMessage() + " doesn't response. Check your connection");
             }
         } else {
             listener.onDownloadFailed("Can't create file");
@@ -76,7 +76,7 @@ public class Downloader implements Runnable {
     }
 
     /*
-    скафивает данные из интернета в переданный файл
+    скачивает данные из интернета в переданный файл
      */
     private void download(HttpURLConnection connection, File file) throws IOException {
         try (InputStream is = connection.getInputStream()) {

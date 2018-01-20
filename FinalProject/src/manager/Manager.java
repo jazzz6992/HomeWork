@@ -123,21 +123,30 @@ public class Manager implements DownloadCompleteListener, ListForPrintChangeList
     добавляет в список для отображения все доступные акции
      */
     public void showAll() {
-        synchronized (model) {
-            while (model.getStockExchange() == null) {
-                try {
-                    model.wait();
-                } catch (InterruptedException ignored) {
+        Thread showAllThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                synchronized (model) {
+                    while (model.getStockExchange() == null) {
+                        try {
+                            model.wait();
+                        } catch (InterruptedException ignored) {
+                        }
+                    }
+                    model.setStocksToDisplay(model.getStockExchange().getStock());
                 }
             }
-            model.setStocksToDisplay(model.getStockExchange().getStock());
-        }
+        });
+        showAllThread.start();
     }
 
     //обнуляет данные модели
     public void resetAll() {
         synchronized (model) {
-            model.getFile().delete();
+            File file = model.getFile();
+            if (file != null) {
+                file.delete();
+            }
             model.setFile(null);
             model.setStockExchange(null);
             model.setStocksToDisplay(null);
@@ -163,16 +172,18 @@ public class Manager implements DownloadCompleteListener, ListForPrintChangeList
 
     public void average() {
         double average = 0;
-        for (Stock s :
-                model.getStocksToDisplay()) {
-            average += s.getBid();
+        if (model.getStocksToDisplay() != null) {
+            for (Stock s :
+                    model.getStocksToDisplay()) {
+                average += s.getBid();
+            }
+            average /= model.getStocksToDisplay().size();
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append(model.toString())
+                    .append("\n")
+                    .append("Average price for selected stocks is ")
+                    .append(String.format("%.3f", average));
+            ui.print(stringBuilder.toString());
         }
-        average /= model.getStocksToDisplay().size();
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(model.toString())
-                .append("\n")
-                .append("Average price for selected stocks is ")
-                .append(String.format("%.3f", average));
-        ui.print(stringBuilder.toString());
     }
 }
