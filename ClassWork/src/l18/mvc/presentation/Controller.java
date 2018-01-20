@@ -17,7 +17,7 @@ public class Controller {
     }
 
     public void getMoney() {
-        GetMoneyUseCase getMoneyUseCase = new GetMoneyUseCase();
+        GetMoneyUseCase getMoneyUseCase = new GetMoneyUseCase(null);
         Money money = new Money();
         money.setMoney(50);
         getMoneyUseCase.execute(money, new GetMoneyUseCase.GetMoneyListener() {

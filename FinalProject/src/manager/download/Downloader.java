@@ -1,6 +1,7 @@
 package manager.download;
 
 import manager.listeners.DownloadCompleteListener;
+import model.Model;
 
 import java.io.*;
 import java.net.HttpURLConnection;
@@ -10,13 +11,13 @@ public class Downloader implements Runnable {
     private String urlLink;
     private String path;
     private DownloadCompleteListener listener;
-    private final Object monitor;
+    private final Model monitor;
 
     /*
     конструктор, с параметрами, необходимыми, для загрузки файла, так же принимает объект-монитор,
     используемый для синхронизации (менеджер передает Model)
      */
-    public Downloader(String urlLink, String path, DownloadCompleteListener listener, Object monitor) {
+    public Downloader(String urlLink, String path, DownloadCompleteListener listener, Model monitor) {
         this.urlLink = urlLink;
         this.path = path;
         this.listener = listener;
