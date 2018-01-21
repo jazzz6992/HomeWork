@@ -1,0 +1,55 @@
+{
+  "name": "Moscow Stock",
+  "location": "Minks",
+  "date": "2015-10-09 12:35:00 +0300",
+  "stock": [
+      {
+        "id": 0,
+        "name": "GTL, ао",
+        "bid": 0.1885,
+        "minPrice": 0.1405,
+        "maxPrice": 0.1885,
+        "visible": true
+      },
+      {
+        "id": 1,
+        "name": "Polymetal International, ао",
+        "bid": 553.50,
+        "minPrice": 553,
+        "maxPrice": 551,
+        "visible": true
+      },
+	  {
+        "id": 2,
+        "name": "АВТОВАЗ, ао",
+        "bid": 9.7900,
+        "minPrice": 9.700,
+        "maxPrice": 9.700,
+        "visible": true
+      },
+      {
+        "id": 3,
+        "name": "Аэрофлот, ао",
+        "bid": 43.31,
+        "minPrice": 41.19,
+        "maxPrice": 44.15,
+        "visible": true
+      },
+      {
+        "id": 4,
+        "name": "Банк Москвы, ао",
+        "bid": 765.00,
+        "minPrice": 790.00,
+        "maxPrice": 790.00,
+        "visible": true
+      },
+      {
+        "id": 5,
+        "name": "Башнефть, ао",
+        "bid": 1791.00,
+        "minPrice": 1773.00,
+        "maxPrice": 1805.00,
+        "visible": false
+      }
+    ]
+}
