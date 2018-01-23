@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="ui.ContentPanel">
+  <grid id="27dc6" binding="mainPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="646" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <grid id="fb15d" binding="buttonPanel" layout-manager="FlowLayout" hgap="5" vgap="5" flow-align="1">
+        <constraints border-constraint="South"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="16f89" class="javax.swing.JButton" binding="sortByNameButton">
+            <constraints/>
+            <properties>
+              <text value="Sort by name"/>
+            </properties>
+          </component>
+          <component id="ebfd4" class="javax.swing.JButton" binding="sortByPriceButton">
+            <constraints/>
+            <properties>
+              <text value="Sort by price"/>
+            </properties>
+          </component>
+          <component id="d02bc" class="javax.swing.JButton" binding="showAveragePriceButton">
+            <constraints/>
+            <properties>
+              <text value="Avarage price"/>
+            </properties>
+          </component>
+          <component id="9cb6b" class="javax.swing.JButton" binding="showAllButton">
+            <constraints/>
+            <properties>
+              <text value="Show all"/>
+            </properties>
+          </component>
+          <component id="418e" class="javax.swing.JButton" binding="searchButton">
+            <constraints/>
+            <properties>
+              <text value="Search"/>
+            </properties>
+          </component>
+          <component id="a91fc" class="javax.swing.JButton" binding="backToSource">
+            <constraints/>
+            <properties>
+              <text value="Back to source"/>
+            </properties>
+          </component>
+        </children>
+      </grid>
+      <grid id="a2fd4" binding="textPanel" layout-manager="BorderLayout" hgap="0" vgap="0">
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="c599" class="javax.swing.JTextField" binding="searchField">
+            <constraints border-constraint="South"/>
+            <properties>
+              <toolTipText value=""/>
+            </properties>
+          </component>
+          <scrollpane id="e80da" binding="scrollPane">
+            <constraints border-constraint="Center"/>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <component id="7ea66" class="javax.swing.JTextArea" binding="contentArea">
+                <constraints/>
+                <properties/>
+              </component>
+            </children>
+          </scrollpane>
+        </children>
+      </grid>
+    </children>
+  </grid>
+</form>
