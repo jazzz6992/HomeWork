@@ -15,8 +15,17 @@ public class UiImplimentation extends JFrame implements Ui, ChooseSourceListener
     //панель, испоьзуемая в JFrame в данный момент
     private CurrentPanel currentPanel;
 
+    private CurrentPanel getCurrentPanel() {
+        return currentPanel;
+    }
+
+    private void setCurrentPanel(CurrentPanel currentPanel) {
+        this.currentPanel = currentPanel;
+    }
+
     //инициализация пользовательского интерфейса и добавление в менеджер ссылки на него
-    public void initializeUI() {
+    @Override
+    public void initializeUi() {
         manager = Manager.getInstance();
         manager.setUi(this);
         setCurrentPanel(new ChooseSourcePanel(this));
@@ -24,14 +33,6 @@ public class UiImplimentation extends JFrame implements Ui, ChooseSourceListener
         setSize(300, 100);
         setVisible(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-    }
-
-    private CurrentPanel getCurrentPanel() {
-        return currentPanel;
-    }
-
-    private void setCurrentPanel(CurrentPanel currentPanel) {
-        this.currentPanel = currentPanel;
     }
 
     @Override
