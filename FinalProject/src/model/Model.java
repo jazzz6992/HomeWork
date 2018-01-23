@@ -98,7 +98,6 @@ public class Model implements DownloadCompleteListener, ParseCompleteListener {
         if (stocksToDisplay != null) {
             listener.onSuccess();
         }
-        notifyAll();
     }
 
     /*
