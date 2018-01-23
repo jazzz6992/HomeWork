@@ -72,7 +72,7 @@ public class Manager implements ListForPrintChangeListener, DataChangedResultLis
 
     //принимает измененный список акций для отображения и обновляет модель
     @Override
-    public void updateListForPrint(List<Stock> stocks) {
+    public void onListChanged(List<Stock> stocks) {
         model.setStocksToDisplay(stocks);
     }
 

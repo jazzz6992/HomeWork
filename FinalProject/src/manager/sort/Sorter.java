@@ -58,7 +58,7 @@ public class Sorter implements Runnable {
             }
             List<Stock> stocks = new ArrayList<>(model.getStocksToDisplay());
             stocks.sort(comparator);
-            listener.updateListForPrint(stocks);
+            listener.onListChanged(stocks);
         }
     }
 }
