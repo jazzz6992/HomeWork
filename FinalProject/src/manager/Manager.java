@@ -39,12 +39,12 @@ public class Manager implements ListForPrintChangeListener, DataChangedResultLis
     и передает эти данные модели для загрузки
      */
     public void getData(Ui.Source source) {
-        String link;
-        String fileName;
+        String link = null;
+        String fileName = null;
         if (source == Ui.Source.JSON) {
             link = JSON_LINK;
             fileName = JSON_FILE;
-        } else {
+        } else if (source == Ui.Source.XML) {
             link = XML_LINK;
             fileName = XML_FILE;
         }

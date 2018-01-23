@@ -1,8 +1,9 @@
 package ui;
 
-import ui.buttonChoices.Source;
+
 import ui.interfaces.ChooseSourceListener;
 import ui.interfaces.CurrentPanel;
+import ui.interfaces.Ui;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -22,13 +23,13 @@ public class ChooseSourcePanel implements CurrentPanel {
         jsonButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                listener.onChooseSourceMade(Source.JSON);
+                listener.onChooseSourceMade(Ui.Source.JSON);
             }
         });
         xmlButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                listener.onChooseSourceMade(Source.XML);
+                listener.onChooseSourceMade(Ui.Source.XML);
             }
         });
     }

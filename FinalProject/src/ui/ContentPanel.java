@@ -1,8 +1,8 @@
 package ui;
 
-import ui.buttonChoices.Action;
 import ui.interfaces.ChooseActionListener;
 import ui.interfaces.CurrentPanel;
+import ui.interfaces.Ui;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -32,38 +32,38 @@ public class ContentPanel implements CurrentPanel {
         sortByPriceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                listener.onChooseActionMade(Action.SORT_BY_PRICE);
+                listener.onChooseActionMade(Ui.Action.SORT_BY_PRICE);
             }
         });
         searchButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                listener.onChooseActionMade(Action.SEARCH);
+                listener.onChooseActionMade(Ui.Action.SEARCH);
                 searchField.setText(SEARCH_HINT);
             }
         });
         showAllButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                listener.onChooseActionMade(Action.SHOW_ALL);
+                listener.onChooseActionMade(Ui.Action.SHOW_ALL);
             }
         });
         showAveragePriceButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                listener.onChooseActionMade(Action.AVERAGE);
+                listener.onChooseActionMade(Ui.Action.AVERAGE);
             }
         });
         sortByNameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                listener.onChooseActionMade(Action.SORT_BY_NAME);
+                listener.onChooseActionMade(Ui.Action.SORT_BY_NAME);
             }
         });
         backToSource.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                listener.onChooseActionMade(Action.BACK);
+                listener.onChooseActionMade(Ui.Action.BACK);
             }
         });
         searchField.addFocusListener(new FocusAdapter() {
