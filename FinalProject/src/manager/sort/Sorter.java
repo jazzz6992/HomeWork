@@ -1,9 +1,9 @@
 package manager.sort;
 
-import ui.buttonChoices.Action;
 import manager.interfaces.ListForPrintChangeListener;
 import model.Model;
 import model.entity.Stock;
+import ui.interfaces.Ui;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -19,7 +19,7 @@ public class Sorter implements Runnable {
     далее использует его
      */
 
-    public Sorter(ListForPrintChangeListener listener, Model model, Action action) {
+    public Sorter(ListForPrintChangeListener listener, Model model, Ui.Action action) {
         this.listener = listener;
         this.model = model;
         switch (action) {

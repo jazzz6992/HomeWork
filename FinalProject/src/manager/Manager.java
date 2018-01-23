@@ -7,8 +7,6 @@ import manager.sort.Sorter;
 import model.Model;
 import model.entity.Stock;
 import ui.interfaces.Ui;
-import ui.buttonChoices.Action;
-import ui.buttonChoices.Source;
 
 import java.util.List;
 
@@ -40,10 +38,10 @@ public class Manager implements ListForPrintChangeListener, DataChangedResultLis
     устанавливает ссылку для загрузки и имя файла в соответствии с выбором пользователя
     и передает эти данные модели для загрузки
      */
-    public void getData(Source source) {
+    public void getData(Ui.Source source) {
         String link;
         String fileName;
-        if (source == Source.JSON) {
+        if (source == Ui.Source.JSON) {
             link = JSON_LINK;
             fileName = JSON_FILE;
         } else {
@@ -57,7 +55,7 @@ public class Manager implements ListForPrintChangeListener, DataChangedResultLis
     запускает сортировку в новом потоке на основе объекта sorter, учитывая
     выбор пользователем критерия сортировки
     */
-    public void sort(Action action) {
+    public void sort(Ui.Action action) {
         Thread sortThread = new Thread(new Sorter(this, model, action));
         sortThread.start();
     }

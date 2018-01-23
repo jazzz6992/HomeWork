@@ -1,7 +1,5 @@
 package ui.interfaces;
 
-import ui.buttonChoices.Source;
-
 public interface ChooseSourceListener {
-    void onChooseSourceMade(Source source);
+    void onChooseSourceMade(Ui.Source source);
 }
