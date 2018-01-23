@@ -1,4 +1,4 @@
-package ui;
+package ui.interfaces;
 
 import ui.buttonChoices.Source;
 

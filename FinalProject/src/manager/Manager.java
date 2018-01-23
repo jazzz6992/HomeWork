@@ -1,12 +1,12 @@
 package manager;
 
-import manager.listeners.DataChangedResultListener;
-import manager.listeners.ListForPrintChangeListener;
+import manager.interfaces.DataChangedResultListener;
+import manager.interfaces.ListForPrintChangeListener;
 import manager.search.Searcher;
 import manager.sort.Sorter;
 import model.Model;
 import model.entity.Stock;
-import ui.Ui;
+import ui.interfaces.Ui;
 import ui.buttonChoices.Action;
 import ui.buttonChoices.Source;
 

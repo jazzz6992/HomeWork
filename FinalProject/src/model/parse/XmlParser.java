@@ -3,7 +3,7 @@ package model.parse;
 import model.Model;
 import model.entity.Stock;
 import model.entity.StockExchange;
-import model.listeners.ParseCompleteListener;
+import model.interfaces.ParseCompleteListener;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;

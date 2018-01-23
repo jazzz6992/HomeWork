@@ -1,4 +1,4 @@
-package model.listeners;
+package model.interfaces;
 
 import model.entity.StockExchange;
 

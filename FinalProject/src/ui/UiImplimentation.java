@@ -3,6 +3,10 @@ package ui;
 import manager.Manager;
 import ui.buttonChoices.Action;
 import ui.buttonChoices.Source;
+import ui.interfaces.ChooseActionListener;
+import ui.interfaces.ChooseSourceListener;
+import ui.interfaces.CurrentPanel;
+import ui.interfaces.Ui;
 
 import javax.swing.*;
 

@@ -1,6 +1,8 @@
 package ui;
 
 import ui.buttonChoices.Source;
+import ui.interfaces.ChooseSourceListener;
+import ui.interfaces.CurrentPanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

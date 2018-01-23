@@ -1,6 +1,6 @@
 package manager.search;
 
-import manager.listeners.ListForPrintChangeListener;
+import manager.interfaces.ListForPrintChangeListener;
 import model.Model;
 import model.entity.Stock;
 

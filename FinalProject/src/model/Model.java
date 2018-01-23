@@ -1,11 +1,11 @@
 package model;
 
-import manager.listeners.DataChangedResultListener;
+import manager.interfaces.DataChangedResultListener;
 import model.download.Downloader;
 import model.entity.Stock;
 import model.entity.StockExchange;
-import model.listeners.DownloadCompleteListener;
-import model.listeners.ParseCompleteListener;
+import model.interfaces.DownloadCompleteListener;
+import model.interfaces.ParseCompleteListener;
 import model.parse.AbstractParser;
 import model.parse.SimpleParserFactory;
 

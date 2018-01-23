@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.Model;
 import model.entity.StockExchange;
-import model.listeners.ParseCompleteListener;
+import model.interfaces.ParseCompleteListener;
 
 import java.io.File;
 import java.io.FileNotFoundException;

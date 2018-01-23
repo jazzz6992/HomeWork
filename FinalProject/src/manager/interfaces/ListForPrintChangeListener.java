@@ -1,4 +1,4 @@
-package manager.listeners;
+package manager.interfaces;
 
 import model.entity.Stock;
 
