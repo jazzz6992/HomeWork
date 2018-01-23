@@ -41,7 +41,7 @@ public class UiImplimentation extends JFrame implements Ui, ChooseSourceListener
         currentPanel = new ContentPanel(this);
         setContentPane(currentPanel.getMainPanel());
         setSize(800, 600);
-        manager.getFile(source);
+        manager.getData(source);
     }
 
     /*

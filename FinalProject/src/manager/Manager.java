@@ -1,26 +1,19 @@
 package manager;
 
-import manager.download.Downloader;
-import manager.listeners.DataChangedListener;
-import manager.listeners.DownloadCompleteListener;
+import manager.listeners.DataChangedResultListener;
 import manager.listeners.ListForPrintChangeListener;
-import manager.listeners.ParseCompleteListener;
-import manager.parse.AbstractParser;
-import manager.parse.SimpleParserFactory;
 import manager.search.Searcher;
 import manager.sort.Sorter;
 import model.Model;
 import model.entity.Stock;
-import model.entity.StockExchange;
 import ui.Ui;
 import ui.buttonChoices.Action;
 import ui.buttonChoices.Source;
 
-import java.io.File;
 import java.util.List;
 
 
-public class Manager implements DownloadCompleteListener, ListForPrintChangeListener, ParseCompleteListener, DataChangedListener {
+public class Manager implements ListForPrintChangeListener, DataChangedResultListener {
     private static final String JSON_LINK = "http://kiparo.ru/t/stock.json";
     private static final String XML_LINK = "http://kiparo.ru/t/stock.xml";
     private static final String JSON_FILE = "src/content.json";
@@ -45,9 +38,9 @@ public class Manager implements DownloadCompleteListener, ListForPrintChangeList
 
     /*
     устанавливает ссылку для загрузки и имя файла в соответствии с выбором пользователя
-    создает загрузчик и запускает на его основе новый поток
+    и передает эти данные модели для загрузки
      */
-    public void getFile(Source source) {
+    public void getData(Source source) {
         String link;
         String fileName;
         if (source == Source.JSON) {
@@ -57,35 +50,7 @@ public class Manager implements DownloadCompleteListener, ListForPrintChangeList
             link = XML_LINK;
             fileName = XML_FILE;
         }
-        Downloader downloader = new Downloader(link, fileName, this, model);
-        Thread downloadThread = new Thread(downloader, "download thread");
-        downloadThread.start();
-    }
-
-    //в случае успешной загрузки инициализирует поле модели и начинает парсинг
-    @Override
-    public void onDownloadSuccess(File file) {
-        synchronized (model) {
-            model.setFile(file);
-            parse();
-        }
-    }
-
-    //отсылает на печать сообщение об ощибке
-    @Override
-    public void onDownloadFailed(String message) {
-        ui.print(message);
-    }
-
-    /*
-    инициализирует переменную абстрактного парсера конкретной реализацией в зависимости от состояния модели
-    и запускает поток на основе созданного парсера
-     */
-    private void parse() {
-        AbstractParser parser;
-        parser = SimpleParserFactory.createParser(model, this);
-        Thread parseThread = new Thread(parser);
-        parseThread.start();
+        model.getData(link, fileName);
     }
 
     /*
@@ -110,13 +75,7 @@ public class Manager implements DownloadCompleteListener, ListForPrintChangeList
     //принимает измененный список акций для отображения и обновляет модель
     @Override
     public void updateListForPrint(List<Stock> stocks) {
-        showCurrentList(stocks);
-    }
-
-    private void showCurrentList(List<Stock> stocks) {
-        synchronized (model) {
-            model.setStocksToDisplay(stocks);
-        }
+        model.setStocksToDisplay(stocks);
     }
 
     /*
@@ -142,34 +101,21 @@ public class Manager implements DownloadCompleteListener, ListForPrintChangeList
 
     //обнуляет данные модели
     public void resetAll() {
-        synchronized (model) {
-            File file = model.getFile();
-            if (file != null) {
-                file.delete();
-            }
-            model.setFile(null);
-            model.setStockExchange(null);
-            model.setStocksToDisplay(null);
-        }
+        model.clear();
     }
 
     //при оповещении о изменениях в модели отправляет ее на печать в ui
     @Override
-    public void update() {
+    public void onSuccess() {
         ui.print(model.toString());
     }
 
-
     @Override
-    public void onParseSuccess(StockExchange stockExchange) {
-        model.setStockExchange(stockExchange);
-    }
-
-    @Override
-    public void onParseFailed(String message) {
+    public void onFail(String message) {
         ui.print(message);
     }
 
+    //вычисляет среднюю цену акций из списка и отправляет информацию на печать
     public void average() {
         double average = 0;
         if (model.getStocksToDisplay() != null) {
