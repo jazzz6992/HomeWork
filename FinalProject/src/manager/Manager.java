@@ -1,17 +1,24 @@
 package manager;
 
+import manager.download.Downloader;
 import manager.interfaces.DataChangedResultListener;
+import manager.interfaces.DownloadCompleteListener;
 import manager.interfaces.ListForPrintChangeListener;
+import manager.interfaces.ParseCompleteListener;
+import manager.parse.AbstractParser;
+import manager.parse.SimpleParserFactory;
 import manager.search.Searcher;
 import manager.sort.Sorter;
 import model.Model;
 import model.entity.Stock;
+import model.entity.StockExchange;
 import ui.interfaces.Ui;
 
+import java.io.File;
 import java.util.List;
 
 
-public class Manager implements ListForPrintChangeListener, DataChangedResultListener {
+public class Manager implements ListForPrintChangeListener, DataChangedResultListener, DownloadCompleteListener, ParseCompleteListener {
     private static final String JSON_LINK = "http://kiparo.ru/t/stock.json";
     private static final String XML_LINK = "http://kiparo.ru/t/stock.xml";
     private static final String JSON_FILE = "src/content.json";
@@ -48,7 +55,10 @@ public class Manager implements ListForPrintChangeListener, DataChangedResultLis
             link = XML_LINK;
             fileName = XML_FILE;
         }
-        model.getData(link, fileName);
+        Downloader downloader = new Downloader(link, fileName, this, model);
+        Thread downloadThread = new Thread(downloader, "Download thread");
+        downloadThread.start();
+
     }
 
     /*
@@ -99,18 +109,20 @@ public class Manager implements ListForPrintChangeListener, DataChangedResultLis
 
     //обнуляет данные модели
     public void resetAll() {
-        model.clear();
+        synchronized (model) {
+            if (model.getFile() != null) {
+                model.getFile().delete();
+            }
+            model.setFile(null);
+            model.setStockExchange(null);
+            model.setStocksToDisplay(null);
+        }
     }
 
     //при оповещении о изменениях в модели отправляет ее на печать в ui
     @Override
     public void onSuccess() {
         ui.print(model.toString());
-    }
-
-    @Override
-    public void onFail(String message) {
-        ui.print(message);
     }
 
     //вычисляет среднюю цену акций из списка и отправляет информацию на печать
@@ -129,5 +141,30 @@ public class Manager implements ListForPrintChangeListener, DataChangedResultLis
                     .append(String.format("%.3f", average));
             ui.print(stringBuilder.toString());
         }
+    }
+
+    @Override
+    public void onDownloadSuccess(File file) {
+        synchronized (model) {
+            model.setFile(file);
+        }
+        AbstractParser parser = SimpleParserFactory.createParser(model, this);
+        Thread parseThread = new Thread(parser, "Parse thread");
+        parseThread.start();
+    }
+
+    @Override
+    public void onDownloadFailed(String message) {
+        ui.print(message);
+    }
+
+    @Override
+    public void onParseSuccess(StockExchange stockExchange) {
+        model.setStockExchange(stockExchange);
+    }
+
+    @Override
+    public void onParseFailed(String message) {
+        ui.print(message);
     }
 }

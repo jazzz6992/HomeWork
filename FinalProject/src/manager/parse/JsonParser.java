@@ -1,10 +1,10 @@
-package model.parse;
+package manager.parse;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import model.Model;
 import model.entity.StockExchange;
-import model.interfaces.ParseCompleteListener;
+import manager.interfaces.ParseCompleteListener;
 
 import java.io.File;
 import java.io.FileNotFoundException;

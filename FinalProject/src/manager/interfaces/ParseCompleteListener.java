@@ -1,4 +1,4 @@
-package model.interfaces;
+package manager.interfaces;
 
 import model.entity.StockExchange;
 

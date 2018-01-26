@@ -1,7 +1,7 @@
-package model.download;
+package manager.download;
 
 import model.Model;
-import model.interfaces.DownloadCompleteListener;
+import manager.interfaces.DownloadCompleteListener;
 
 import java.io.*;
 import java.net.HttpURLConnection;

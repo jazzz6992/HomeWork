@@ -1,18 +1,13 @@
 package model;
 
 import manager.interfaces.DataChangedResultListener;
-import model.download.Downloader;
 import model.entity.Stock;
 import model.entity.StockExchange;
-import model.interfaces.DownloadCompleteListener;
-import model.interfaces.ParseCompleteListener;
-import model.parse.AbstractParser;
-import model.parse.SimpleParserFactory;
 
 import java.io.File;
 import java.util.List;
 
-public class Model implements DownloadCompleteListener, ParseCompleteListener {
+public class Model {
 
     //файл с данными
     private File file;
@@ -24,46 +19,6 @@ public class Model implements DownloadCompleteListener, ParseCompleteListener {
 
     public Model(DataChangedResultListener listener) {
         this.listener = listener;
-    }
-
-    public void getData(String url, String path) {
-        downloadData(url, path);
-    }
-
-    //создает загрузчик и запускает на его основе новый поток
-    private void downloadData(String url, String path) {
-        Downloader downloader = new Downloader(url, path, this, this);
-        Thread downloadThread = new Thread(downloader, "download thread");
-        downloadThread.start();
-    }
-
-    @Override
-    public void onDownloadSuccess(File file) {
-        this.file = file;
-        parseData();
-    }
-
-    @Override
-    public void onDownloadFailed(String message) {
-        listener.onFail(message);
-    }
-
-    //создает нужный парсер на основе данных модели и запускает на его основе новый поток
-    private void parseData() {
-        AbstractParser parser;
-        parser = SimpleParserFactory.createParser(this, this);
-        Thread parseThread = new Thread(parser, "parse thread");
-        parseThread.start();
-    }
-
-    @Override
-    public void onParseSuccess(StockExchange stockExchange) {
-        setStockExchange(stockExchange);
-    }
-
-    @Override
-    public void onParseFailed(String message) {
-        listener.onFail(message);
     }
 
     public File getFile() {
@@ -101,18 +56,6 @@ public class Model implements DownloadCompleteListener, ParseCompleteListener {
     }
 
     /*
-    обнуляет поля модели и удаляет загруженный файл
-     */
-    public void clear() {
-        synchronized (this) {
-            if (file != null) {
-                file.delete();
-            }
-            setFile(null);
-            setStockExchange(null);
-            setStocksToDisplay(null);
-        }
-    }
 
     /*
       берет из stockExchange только информацию о самой бирже.

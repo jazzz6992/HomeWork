@@ -1,4 +1,4 @@
-package model.parse;
+package manager.parse;
 
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;

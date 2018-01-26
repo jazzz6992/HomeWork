@@ -1,7 +1,7 @@
-package model.parse;
+package manager.parse;
 
 import model.Model;
-import model.interfaces.ParseCompleteListener;
+import manager.interfaces.ParseCompleteListener;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
