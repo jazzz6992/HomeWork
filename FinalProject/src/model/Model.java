@@ -51,11 +51,9 @@ public class Model {
     public synchronized void setStocksToDisplay(List<Stock> stocksToDisplay) {
         this.stocksToDisplay = stocksToDisplay;
         if (stocksToDisplay != null) {
-            listener.onSuccess();
+            listener.onDataChanged();
         }
     }
-
-    /*
 
     /*
       берет из stockExchange только информацию о самой бирже.

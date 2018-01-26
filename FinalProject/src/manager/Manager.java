@@ -121,7 +121,7 @@ public class Manager implements ListForPrintChangeListener, DataChangedResultLis
 
     //при оповещении о изменениях в модели отправляет ее на печать в ui
     @Override
-    public void onSuccess() {
+    public void onDataChanged() {
         ui.print(model.toString());
     }
 
